@@ -9,7 +9,7 @@
  * Android SDK: http://developer.android.com/sdk/index.html
  * Android 1.6, 2.0 und 2.1 Komponenten (+JavaDoc): http://developer.android.com/sdk/adding-components.html (im Zweifelsfall einfach alle Komponenten installieren)
  * Erste Schritte mit dem Android SDK: http://developer.android.com/guide/developing/eclipse-adt.html
- * AVDs (=Emulator-Images) für Android 1.6 und 2.1 anlegen: Google API Level 7, z.B. 32 MB SD card
+ * AVDs (=Emulator-Images) für Android 1.6 und 2.1 anlegen: Google API Level 4 und 7, z.B. 32 MB SD card.
  
 = Sourceverwaltung =
 Das einfachste für die Teams ist es dieses (android-munich) Open Source Projekt für die Entwicklung zu nutzen. Die Teams können sich auch für Alternativen entscheiden, falls sie das nicht wünschen. 
