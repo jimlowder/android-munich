@@ -1,4 +1,5 @@
 #summary Entwickler sollten folgendes vorbereiten, damit wir sofort loslegen können.
+#labels Featured,Phase-Requirements
 
 = Eclipse für Android vorbereiten =
 
@@ -13,3 +14,9 @@
 = Sourceverwaltung =
 Das einfachste für die Teams ist es dieses (android-munich) Open Source Projekt für die Entwicklung zu nutzen. Die Teams können sich auch für Alternativen entscheiden, falls sie das nicht wünschen. 
 
+ * Google Account anlegen, falls noch nicht vorhanden
+ * Mir (Markus Junginger) die Email-Adresse des Accounts schicken
+ * Ihr werdet daraufhin von mir als Committer des Projektes eintragen (wenn ihr angemeldete Teilnehmer seid)
+ * SVN Repository in Eclipse einrichten. Dafür diese URL nutzen: https://android-munich.googlecode.com/svn/trunk/hackathon (mit eurem Login)
+
+Die einzelnen Projekte sollen dann jeweils als Unterverzeichnis angelegt werden. Als Beispiel habe ich das Projekt LiveWallpaper1 vorbereitet. Um eure Installation zu testen, am besten das Projekt auschecken und auf einem AVD starten.
