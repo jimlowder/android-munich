@@ -1,6 +1,8 @@
 #summary Entwickler sollten folgendes vorbereiten, damit wir sofort loslegen können.
 #labels Featured,Phase-Requirements
 
+Anmeldeseite: https://www.xing.com/events/android-hackathon-456416
+
 = Eclipse für Android vorbereiten =
 
  * Eclipse 3.5: http://www.eclipse.org/downloads/
