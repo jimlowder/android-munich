@@ -18,11 +18,9 @@ package com.example.android.livecubes.cube1;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
