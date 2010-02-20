@@ -1,6 +1,7 @@
 package de.ctg.catfur;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings.System;
@@ -51,12 +52,20 @@ public class catfur extends Activity {
         		
         		if ((deltaX == 0.0)&&(deltaY==0.0)) {
         			Log.d("Cat", "Touch: dx,dy="+deltaX+';'+deltaY);
+        			MediaPlayer player = MediaPlayer.create(this, R.raw.catmeow);
+        			player.start();
+        			
         			} else {
         				
         				long upTime = SystemClock.elapsedRealtime();
         				if ((upTime - lastPetTime) < crawlLimit) {
         					Log.d("Cat", "Crawl: dx,dy/lastPetTime="+deltaX+';'+deltaY+'/'+lastPetTime);
+                			MediaPlayer player = MediaPlayer.create(this, R.raw.catpurr2);
+                			player.start();
         				} else {
+                			MediaPlayer player = MediaPlayer.create(this, R.raw.catpurr2);
+                			player.start();
+                			player.start();
             				Log.d("Cat", "Pet: dx,dy/lastPetTime="+deltaX+';'+deltaY+'/'+lastPetTime);
             				lastPetTime = upTime;
             				
