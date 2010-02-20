@@ -4,6 +4,11 @@ Phasen:
  # Start
  # Discovery (Blue-Tooth)
  # Melodie
- # Synced und alle in Ruhelage => Ready
- # 3-7s Stille
+ # Synced mit Melodie
+ # Ruhelage (alle) => Ready
+ # Stille (3-7s)
  # Geierschrei
+
+Geschossen werden kann ab der Phase *Melodie*.
+Schießen bis zur Phase *Geierschrei*: Verlust wegen Regelverletzung
+Schuss löst Sound aus
