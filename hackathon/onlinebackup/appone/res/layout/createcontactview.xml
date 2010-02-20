@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<TableLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-<Button android:text="@+id/Button02" android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:stretchColumns="1">
+	<TableRow>
+	</TableRow>
+	<TableRow>
+		<TextView android:text="First name:" />
+		<EditText android:id="@+id/firstName" />
+	</TableRow>
+	<TableRow>
+		<TextView android:text="Last name:" />
+		<EditText android:id="@+id/lastName" />
+	</TableRow>
+	<TableRow>
+		<TextView android:text="Email:" />
+		<EditText android:id="@+id/eMail" />
+	</TableRow>
+	<TableRow>
+		<TextView android:text="Phone number:" />
+		<EditText android:id="@+id/phoneNumber" />
+	</TableRow>
+<LinearLayout android:orientation="horizontal">
+<Button android:text="Cancel" android:id="@+id/ButtonCancel" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+<Button android:text="Create contact" android:id="@+id/ButtonCreate" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
 </LinearLayout>
+</TableLayout>
+
