@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.graphics.PointF;
 
@@ -38,6 +40,20 @@ class GameEngineImpl implements GameEngine {
         }
 
         synchronized void gotMessage(final DatagramPacket pack) {
+            final Pattern trajPat = Pattern.compile("^trajectory:([^:)+:([^:)+:([^:)+:([^:)+:([^:)+:$");
+            try {
+                final Matcher m = trajPat.matcher(new String(pack.getData(), UTF_8));
+                if (m.matches()) {
+                    // ignore time Long.parseLong(m.group(1))
+                    ballPos.x = Float.parseFloat(m.group(2));
+                    ballPos.y = Float.parseFloat(m.group(3));
+                    ballSpeed.x = Float.parseFloat(m.group(4));
+                    ballSpeed.y = Float.parseFloat(m.group(5));
+                }
+            }
+            catch (final UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         /**
@@ -52,8 +68,9 @@ class GameEngineImpl implements GameEngine {
             gotMessage(pack);
         }
 
-        void setBallTrajectory(final long t, final PointF pos, final PointF speed) throws IOException {
-            final char sep = ':';
+        final String sep = ":";
+
+        void sendBallTrajectory(final long t, final PointF pos, final PointF speed) throws IOException {
             final String message = "trajectory" + ":" + t + sep + pos.x + sep + pos.y + sep + speed.x + sep + speed.y
                     + sep;
             try {
@@ -98,6 +115,14 @@ class GameEngineImpl implements GameEngine {
         return p;
     }
 
+    /**
+     * Don't forget to {@link #sendTrajectory(long)}
+     * 
+     * @param t
+     * @param pos
+     * @param speed
+     * @throws IOException
+     */
     void setBallTrajectory(final long t, final PointF pos, final PointF speed) throws IOException {
         // final long t = getCurrentTime();
         // @TODO Gegner benachrichtigen!
@@ -108,7 +133,10 @@ class GameEngineImpl implements GameEngine {
         ballSpeed.y = speed.y;
         // - Kollisionszeitpunkt (Zukunft) berechnen
         t_coll = (long) ((1 - ballPosition.x + t0 * ballSpeed.x) / ballSpeed.x);
-        opponent.setBallTrajectory(t, ballPosition, ballSpeed);
+    }
+
+    private void sendTrajectory(final long t) throws IOException {
+        opponent.sendBallTrajectory(t, ballPosition, ballSpeed);
     }
 
     public float getMyRacketPosition() {
