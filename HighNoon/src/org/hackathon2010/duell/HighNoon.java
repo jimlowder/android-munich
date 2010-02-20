@@ -24,7 +24,10 @@ public class HighNoon extends Activity {
 	private SensorManager sensorManager;
 	private Sensor accelerometer;
 	private TextView anzeige;
-	private Sound melody;
+	private Sound intro;
+	private Sound background;
+	private Sound flute;
+	private Sound howl;
 	private Sound vulture;
 	private Sound bang;
 	private LocalBluetoothDevice localBT;
@@ -36,8 +39,10 @@ public class HighNoon extends Activity {
 		setContentView(R.layout.main);
 
 		anzeige = (TextView) findViewById(R.id.anzeige);
-		melody = new Sound(HighNoon.this, R.raw.melody);
-		vulture = new Sound(HighNoon.this, R.raw.vulture);
+		intro = new Sound(HighNoon.this, R.raw.intro);
+		background = new Sound(HighNoon.this, R.raw.background);
+		flute = new Sound(HighNoon.this, R.raw.flute);
+		howl = new Sound(HighNoon.this, R.raw.howl);
 		bang = new Sound(HighNoon.this, R.raw.bang);
 		anzeige.append("now: " + new Date() + "\n");
 		
@@ -83,7 +88,7 @@ public class HighNoon extends Activity {
 		Button startBtn = (Button) findViewById(R.id.start);
 		startBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				melody.start(true);
+				background.start(true);
 			}
 		});
 
@@ -91,7 +96,7 @@ public class HighNoon extends Activity {
 		stopBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				stopOrDestroy();
-				melody.stop();
+				background.stop();
 				HighNoon.this.finish();
 			}
 		});
@@ -117,6 +122,7 @@ public class HighNoon extends Activity {
 		try {
 			localBT = LocalBluetoothDevice.initLocalDevice(this);
 		} catch (Exception e) {
+			anzeige.append(e.toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
