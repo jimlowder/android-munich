@@ -5,6 +5,7 @@
     <string name="nextButton">Next</string>
     <string name="menuSettings">Settings</string>
     <string name="menuAbout">About</string>
+    <string name="takePicture">Take picture</string>
     <string name="dev_names">Michael, Lars, Maurice, Kai, Bernd</string>
     <string name="okButton">хорошо!</string>
 </resources>

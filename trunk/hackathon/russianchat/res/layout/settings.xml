@@ -11,5 +11,8 @@
 		android:layout_weight="1">
 
 	</SurfaceView>
+	<Button android:text="@string/takePicture" android:id="@+id/takePicture"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"></Button>
 
 </LinearLayout>

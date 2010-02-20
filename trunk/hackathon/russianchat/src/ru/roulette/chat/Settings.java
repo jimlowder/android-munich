@@ -5,12 +5,17 @@ import java.io.IOException;
 import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
+import android.widget.Button;
 
 public class Settings extends Activity implements Callback {
 
@@ -18,6 +23,7 @@ public class Settings extends Activity implements Callback {
 	private static Camera camera;
 	private static SurfaceHolder surfaceHolder;
 	private static boolean previewRunning;
+	private static Button takePicture;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,16 @@ public class Settings extends Activity implements Callback {
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		
+		takePicture = (Button) findViewById(R.id.takePicture);
+		takePicture.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				camera.takePicture(shutterCallback, rawCallback, pictureCallback);
+				
+			}
+		});
 	}
 
 	@Override
@@ -65,10 +81,24 @@ public class Settings extends Activity implements Callback {
 		camera.release();
 	}
 	
-	Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
+	Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
 		public void onPictureTaken(byte[] imageData, Camera c) {
+			Log.i("Settings", "onPictureTaken() called");
 			Chat.setImage(imageData);
 			Settings.this.finish();
+		}
+	};
+	
+	ShutterCallback shutterCallback = new ShutterCallback() {
+		public void onShutter() {
+			Log.d("Settings", "onShutter'd");
+		}
+	};
+
+	/** Handles data for raw picture */
+	PictureCallback rawCallback = new PictureCallback() {
+		public void onPictureTaken(byte[] data, Camera camera) {
+			Log.d("Settings", "onPictureTaken - raw");
 		}
 	};
 
