@@ -1,5 +1,6 @@
 package ru.roulette.chat;
 
+import ru.roulette.comm.AndroidCommHandler;
 import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
 import ru.roulette.comm.mock.CommHandlerMock;
@@ -66,7 +67,7 @@ public class Chat extends Activity implements Runnable {
         msgOutput = (EditText) findViewById(R.id.msgOutput);
         userImage = (ImageView) findViewById(R.id.picture);
 		userImage.setImageDrawable(getResources().getDrawable( R.drawable.defaultuserimage));
-        commHandler = new CommHandlerMock();
+        commHandler = new AndroidCommHandler();
     }
     
     /**

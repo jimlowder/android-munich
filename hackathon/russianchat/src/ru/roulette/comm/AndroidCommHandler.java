@@ -20,7 +20,7 @@ public class AndroidCommHandler implements CommHandler {
 	@Override
 	public int login(byte[] image) {
 		int id = this.serviceHandler.postData(image,
-				HttpServiceHandler.SERVERNAME + "login");
+				HttpServiceHandler.SERVERNAME + "logon");
 		Log.d("CommHandler", "My id : " + id);
 		return id;
 	}
