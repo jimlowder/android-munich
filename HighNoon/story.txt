@@ -8,4 +8,6 @@ Story
   (3-7 Sekunden) wird gestartet. 
 - Nach Ablauf des Countdowns ertšnt der Schrei des Kojoten. Ab jetzt
   kann die Schussstellung (horizontal?) eingenommen und der Schu§ ausgelšst werden.
-  
+ 
+ TODO: visuelle Ausgestaltung
+ 
