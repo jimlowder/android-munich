@@ -235,11 +235,7 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
             Resources res = context.getResources();
             // cache handles to our key sprites & other drawables
             mBallImage = context.getResources().getDrawable(
-                    R.drawable.ltr);
-            mFiringImage = context.getResources().getDrawable(
-                    R.drawable.lander_firing);
-            mCrashedImage = context.getResources().getDrawable(
-                    R.drawable.lander_crashed);
+                    R.drawable.ball);
 
             // load background image as a Bitmap instead of a Drawable b/c
             // we don't need to transform it and it's faster to draw this way
@@ -479,6 +475,8 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
             synchronized (mSurfaceHolder) {
                 mCanvasWidth = width;
                 mCanvasHeight = height;
+                
+                mLeverHeight = height/5;
 
                 // don't forget to resize the background image
                 mBackgroundImage = mBackgroundImage.createScaledBitmap(
