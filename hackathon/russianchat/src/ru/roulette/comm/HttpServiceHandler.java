@@ -1,18 +1,18 @@
 package ru.roulette.comm;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -20,7 +20,6 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -71,14 +70,12 @@ public class HttpServiceHandler {
 			httpPostRequest.setEntity(new ByteArrayEntity(image));
 		try {
 			HttpResponse response = httpClient.execute(httpPostRequest);
-			InputStream is = response.getEntity().getContent();
-			int c = 0;
-			String s = "";
-			while ((c = is.read()) >= 0) {
-				s = s + (char) c;
-			}
-			if (s.startsWith("Not"))
+
+			String s = getStringFromEntity(response.getEntity());
+			
+			if (s.startsWith("Not")) {
 				return -1;
+			}
 			return Integer.parseInt(s);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -87,6 +84,30 @@ public class HttpServiceHandler {
 		return 0;
 	}
 
+	private static String getStringFromEntity(HttpEntity entity) {
+		StringBuilder sb = new StringBuilder();
+		InputStreamReader reader = null;
+		try {
+			reader = new InputStreamReader(entity.getContent());
+			BufferedReader buffer = new BufferedReader(reader, 8192);			
+			String cur;
+			while ((cur = buffer.readLine()) != null) {
+				sb.append(cur);
+			}
+		} catch (IOException e) {
+			Log.e("http", "Error while reading inputstream: " + e);
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					Log.e("http", "Error while closing reader: " + e);
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	public Identity getImage(String url) {
 		HttpGet httpGet = new HttpGet(url);
 		InputStream is = null;
