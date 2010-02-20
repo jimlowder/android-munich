@@ -77,6 +77,8 @@ public class XYChart extends YChart {
 		translateMatrix.mapPoints(axis);
 		// Draw Axis
 		c.drawLines(axis, axisPaint);
+		
+		drawPfeil(c, axisPaint, 0.2f);
 	}
 
 	private void drawData(Canvas c) {
@@ -106,6 +108,17 @@ public class XYChart extends YChart {
 		super.paintText(c, "Y Achse", 100, 200);
 	}
 	
+	private void drawPfeil(Canvas c, Paint axisPaint, float distance) {
+		axisPaint.setAntiAlias(true);
+		float[] axis2 = new float[]{ (float) yAxisAtX - distance, (float) yAxis.getMaxValue() - distance,(float) yAxisAtX, (float) yAxis.getMaxValue(),
+				                     (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX + distance, (float) yAxis.getMaxValue() - distance,
+				                     (float) xAxis.getMaxValue(), (float) xAxisAtY , (float) xAxis.getMaxValue() - distance, (float) xAxisAtY + distance,
+				                     (float) xAxis.getMaxValue(), (float) xAxisAtY , (float) xAxis.getMaxValue() - distance, (float) xAxisAtY - distance};
+		scaleMatrix.mapPoints(axis2);
+		translateMatrix.mapPoints(axis2);
+		// Draw Axis
+		c.drawLines(axis2, axisPaint);
+	}
 	public double getyAxisAtX() {
 		return yAxisAtX;
 	}
