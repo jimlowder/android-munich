@@ -89,10 +89,11 @@ public class HttpServiceHandler {
 
 	public Identity getImage(String url) {
 		HttpGet httpGet = new HttpGet(url);
+		InputStream is = null;
 		try {
 			int id = 0;
 			HttpResponse response = httpClient.execute(httpGet);
-			InputStream is = response.getEntity().getContent();
+			is = response.getEntity().getContent();
 
 			String s = "";
 			int c = is.read();
@@ -114,6 +115,14 @@ public class HttpServiceHandler {
 			return ident;
 		} catch (Exception ex) {
 			Log.e("HttpServerHandler getImage", ex.getClass().getName());
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					//fuck off
+				}
+			}
 		}
 
 		return null;
