@@ -1,44 +1,45 @@
 package net.pongjour.model;
 
+import java.io.IOException;
 import java.net.SocketAddress;
 
 import android.graphics.PointF;
 
 public interface GameEngine {
 
-	static class Factory {
-		public static GameEngine getInstance(final SocketAddress addr) {
-			return new GameEngineImpl(addr);
-		}
-	}
+    static class Factory {
+        public static GameEngine getInstance(final SocketAddress addr) throws IOException {
+            return new GameEngineImpl(addr);
+        }
+    }
 
-	PointF getBallPosition();
+    PointF getBallPosition();
 
-	/**
-	 * Prozentuale Position des eigenen Schlägers
-	 * 
-	 * @return 0-1
-	 */
-	float getMyRacketPosition();
+    /**
+     * Prozentuale Position des eigenen Schlägers
+     * 
+     * @return 0-1
+     */
+    float getMyRacketPosition();
 
-	int getMyScore();
+    int getMyScore();
 
-	/**
-	 * Prozentuale Position des gegnerischen Schlägers
-	 * 
-	 * @return 0-1
-	 */
-	float getOpponentRacketPosition();
+    /**
+     * Prozentuale Position des gegnerischen Schlägers
+     * 
+     * @return 0-1
+     */
+    float getOpponentRacketPosition();
 
-	int getOpponentScore();
+    int getOpponentScore();
 
-	float getRacketWidth();
+    float getRacketWidth();
 
-	void setMyRacketPosition(float p);
+    void setMyRacketPosition(float p);
 
-	/**
-	 * Signalisiert dem Gegner, wir sind bereit, von uns aus kann es los gehen.
-	 */
-	void startGame();
+    /**
+     * Signalisiert dem Gegner, wir sind bereit, von uns aus kann es los gehen.
+     */
+    void startGame();
 
 }
