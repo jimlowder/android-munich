@@ -8,4 +8,6 @@
     <string name="takePicture">Take picture</string>
     <string name="dev_names">Michael, Lars, Maurice, Kai, Bernd</string>
     <string name="okButton">хорошо!</string>
+    <string name="menuLogout">Logout!</string>
+    
 </resources>
