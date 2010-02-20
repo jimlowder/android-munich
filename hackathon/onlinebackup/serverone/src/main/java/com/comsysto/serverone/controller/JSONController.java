@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ public class JSONController {
 	@RequestMapping(value = "contact/mock", method = RequestMethod.GET)
 	public @ResponseBody
 	Collection<Contact> updateMock(
-			@RequestParam("id") Long id,
+			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName,
 			@RequestParam("eMail") String eMail,
@@ -53,11 +54,14 @@ public class JSONController {
 	@RequestMapping(value = "contact", method = RequestMethod.PUT)
 	public @ResponseBody
 	Collection<Contact> update(
-			@RequestParam("id") Long id,
+			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName,
 			@RequestParam("eMail") String eMail,
 			@RequestParam(value = "phoneNumber", required = false) String phoneNumber) {
+		if (id == null) {
+			id = Long.valueOf(RandomStringUtils.randomNumeric(10));
+		}
 		Contact contact = new Contact(id, firstName, lastName, eMail,
 				phoneNumber);
 		dataSource.put(contact);
