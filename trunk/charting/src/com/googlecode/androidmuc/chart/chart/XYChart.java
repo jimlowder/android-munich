@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -18,22 +17,21 @@ import java.util.List;
 public class XYChart extends YChart {
 
 	static final String TAG = "XYChart";
-		
+	Matrix scaleMatrix;
+	Matrix translateMatrix;
+	
 	double yAxisAtX;
 	ScaleAxis xAxis;
 	List<XYDataset> data;
 	
 	public XYChart(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 	public XYChart(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	public XYChart(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -46,6 +44,15 @@ public class XYChart extends YChart {
 			for (ScaleAxis y2axis : y2AxisList) {
 				y2axis.onLayout(changed, left, top, right, bottom);
 			}
+		
+		float[] mins = new float[] { (float) xAxis.getMinValue(), (float) yAxis.getMinValue()};
+
+		scaleMatrix = new Matrix();
+		scaleMatrix.setScale(xAxis.getScaleFactor(), yAxis.getScaleFactor());
+		scaleMatrix.mapPoints(mins);
+		
+		translateMatrix = new Matrix();
+		translateMatrix.setTranslate(-mins[0], getMeasuredHeight()-1-mins[1]);
 	}
 	
 	@Override
@@ -60,40 +67,26 @@ public class XYChart extends YChart {
 			}
 	}
 	
-	@Override
-	protected void onDraw(Canvas c) {
-		
-//		super.onDraw(c);
-		
+	private void drawAxis(Canvas c) {
 		Paint axisPaint = new Paint();
 		axisPaint.setColor(Color.WHITE);
 		axisPaint.setStrokeWidth(0);
-		
-		float[] pts = new float[]{ (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX, (float) yAxis.getMinValue(),
+		float[] axis = new float[]{ (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX, (float) yAxis.getMinValue(),
 				(float) xAxis.getMinValue(), (float) xAxisAtY, (float) xAxis.getMaxValue(), (float) xAxisAtY };
-		float[] mins = new float[] { (float) xAxis.getMinValue(), (float) yAxis.getMinValue()};
+		scaleMatrix.mapPoints(axis);
+		translateMatrix.mapPoints(axis);
+		// Draw Axis
+		c.drawLines(axis, axisPaint);
+	}
 
-		Matrix scaleMatrix = new Matrix();
-		scaleMatrix.setScale(xAxis.getScaleFactor(), yAxis.getScaleFactor());
-		scaleMatrix.mapPoints(pts);
-		scaleMatrix.mapPoints(mins);
-		
-		Matrix translateMatrix = new Matrix();
-		translateMatrix.setTranslate(-mins[0], getMeasuredHeight()-1-mins[1]);
-		translateMatrix.mapPoints(pts);
-		
-//		Log.v(TAG, "canvas width   : " + c.getWidth());
-//		Log.v(TAG, "canvas height  : " + c.getHeight());
-//		Log.v(TAG, "measured width : " + getMeasuredWidth());
-//		Log.v(TAG, "measured height: " + getMeasuredHeight());
-//		Log.v(TAG, "clip rectangle : " + c.getClipBounds().toString());
-	
-		
+	private void drawData(Canvas c) {
 		Paint dataPaint = new Paint();
 		dataPaint.setStrokeWidth(2);
+		dataPaint.setAntiAlias(true);
+		
 		for (XYDataset dat : data) {
 			dataPaint.setColor(dat.getColor());
-			pts = makePointArray(dat.getxValues(), dat.getyValues());
+			float[] pts = makePointArray(dat.getxValues(), dat.getyValues());
 			scaleMatrix.mapPoints(pts);
 			translateMatrix.mapPoints(pts);
 			StringBuffer pointlist = new StringBuffer();
@@ -104,27 +97,36 @@ public class XYChart extends YChart {
 			Log.v(TAG,pointlist.toString());
 			c.drawLines(pts, dataPaint);
 		}
-		// Draw Axis
-		c.drawLines(pts, axisPaint);
-		
+	}
+	
+	@Override
+	protected void onDraw(Canvas c) {
+		drawData(c);
+		drawAxis(c);
 		super.paintText(c, "Y Achse", 100, 200);
 	}
+	
 	public double getyAxisAtX() {
 		return yAxisAtX;
 	}
+	
 	public void setyAxisAtX(double yAxisAtX) {
 		this.yAxisAtX = yAxisAtX;
 	}
+	
 	public ScaleAxis getxAxis() {
 		return xAxis;
 	}
+	
 	public void setxAxis(ScaleAxis xAxis) {
 		this.xAxis = xAxis;
 		this.xAxis.setPosition(Axis.Position.BOTTOM);
 	}
+	
 	public List<XYDataset> getData() {
 		return data;
 	}
+	
 	public void setData(List<XYDataset> data) {
 		this.data = data;
 	}
