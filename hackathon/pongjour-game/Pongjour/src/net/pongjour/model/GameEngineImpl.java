@@ -36,7 +36,18 @@ class GameEngineImpl implements GameEngine {
             catch (final UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
-            receiveLoop();
+            new Thread() {
+                @Override
+                public void run() {
+                    for (;;)
+                        try {
+                            Networking.this.receiveLoop();
+                        }
+                        catch (final IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                }
+            }.start();
         }
 
         synchronized void gotMessage(final DatagramPacket pack) {
