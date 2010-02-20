@@ -19,6 +19,9 @@ public class HighNoon extends Activity {
 	private Sensor accelerometer;
 	private TextView anzeige;
 	private LocalBluetoothDevice localBT;
+	private Sound melody;
+	private Sound vulture;
+	private Sound bang;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -27,26 +30,29 @@ public class HighNoon extends Activity {
 		setContentView(R.layout.main);
 
 		anzeige = (TextView) findViewById(R.id.anzeige);
+		melody = new Sound(HighNoon.this, R.raw.melody);
+		vulture = new Sound(HighNoon.this, R.raw.vulture);
+		bang = new Sound(HighNoon.this, R.raw.bang);
 
 		Button startBtn = (Button) findViewById(R.id.start);
 		startBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				// sensorManager.registerListener(sensorListener, accelerometer,
-				// SensorManager.SENSOR_DELAY_FASTEST);
+				melody.start(true);
 			}
 		});
 
 		Button stopBtn = (Button) findViewById(R.id.stop);
 		stopBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				//
+				melody.stop();
+				HighNoon.this.finish();
 			}
 		});
 
 		Button pengBtn = (Button) findViewById(R.id.peng);
 		pengBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				//
+				bang.start(false);
 			}
 		});
 
@@ -61,7 +67,6 @@ public class HighNoon extends Activity {
 		}
 		anzeige.append("--- das waren die Sensoren ---");
 
-		// anzeige.setText("");
 		try {
 			localBT = LocalBluetoothDevice.initLocalDevice(this);
 		} catch (Exception e) {
