@@ -57,8 +57,8 @@ public class Settings extends Activity implements Callback {
 			camera.stopPreview();
 		}
 		Camera.Parameters p = camera.getParameters();
-		p.setPreviewSize(200, 200);
-		p.setPictureSize(200, 200);
+		p.setPreviewSize(120, 120);
+		p.setPictureSize(120, 120);
 		camera.setParameters(p);
 		try {
 			camera.setPreviewDisplay(holder);
