@@ -3,4 +3,6 @@
     <string name="app_name">RussianChat</string>
     <string name="sendButton">Send</string>
     <string name="nextButton">Next</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuAbout">About</string>
 </resources>
