@@ -1,14 +1,10 @@
 package ru.roulette.comm;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -28,7 +24,7 @@ import android.util.Log;
 
 public class HttpServiceHandler {
 
-	public final static String SERVERNAME = "http://DUMMY/";
+	public final static String SERVERNAME = "http://192.168.0.167:8000/";
 
 	private HttpClient httpClient;
 
@@ -37,7 +33,7 @@ public class HttpServiceHandler {
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 		HttpProtocolParams.setContentCharset(params, "utf-8");
-		params.setBooleanParameter("http.protocol.expect-continue", false);
+		// params.setBooleanParameter("http.protocol.expect-continue", false);
 
 		// registers schemes for both http and https
 		SchemeRegistry registry = new SchemeRegistry();
@@ -57,7 +53,8 @@ public class HttpServiceHandler {
 
 	public int postData(byte[] image, String url) {
 		HttpPost httpPostRequest = new HttpPost(url);
-		httpPostRequest.setEntity(new ByteArrayEntity(image));
+		if (image != null)
+			httpPostRequest.setEntity(new ByteArrayEntity(image));
 		try {
 			HttpResponse response = httpClient.execute(httpPostRequest);
 			InputStream is = response.getEntity().getContent();
@@ -66,10 +63,11 @@ public class HttpServiceHandler {
 			while ((c = is.read()) >= 0) {
 				s = s + (char) c;
 			}
-
+			if (s.startsWith("Not"))
+				return -1;
 			return Integer.parseInt(s);
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler postData", ex.getLocalizedMessage());
+			ex.printStackTrace();
 		}
 
 		return 0;
@@ -78,18 +76,29 @@ public class HttpServiceHandler {
 	public Identity getImage(String url) {
 		HttpGet httpGet = new HttpGet(url);
 		try {
+			int id = 0;
 			HttpResponse response = httpClient.execute(httpGet);
-			Header header = response.getFirstHeader("Content-disposition");
-			String filename = header.getValue().split("=")[1];
-			byte[] bytebuffer = new byte[(int) response.getEntity()
-					.getContentLength()];
+			InputStream is = response.getEntity().getContent();
+
+			String s = "";
+			int c = is.read();
+			while (c >= 0) {
+				s = s + (char) c;
+				c = is.read();
+			}
+
+			if (s.length() > 0) {
+				id = Integer.parseInt(s);
+			}
+
 			Identity ident = new Identity();
-			ident.setId(filename);
-			ident.setImage(bytebuffer);
+			ident.setId(id);
+			ident.setImage(null);
 
 			return ident;
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler getImage", ex.getLocalizedMessage());
+			Log.e("HttpServerHandler getImage", ex.getClass().getName());
+			ex.printStackTrace();
 		}
 
 		return null;
@@ -98,7 +107,7 @@ public class HttpServiceHandler {
 
 	public void sendMessage(int myid, int toid, String message, String url) {
 		HttpPost httpPostRequest = new HttpPost(url + "?fromID=" + myid
-				+ "&toID=" + toid);
+				+ "&toID=" + toid + "&txt=" + message);
 		try {
 			httpPostRequest.setEntity(new StringEntity(message));
 
@@ -108,22 +117,28 @@ public class HttpServiceHandler {
 						.d("sendMessage", response.getStatusLine()
 								.getReasonPhrase());
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler getImage", ex.getLocalizedMessage());
+			ex.printStackTrace();
 		}
 	}
 
 	public String getString(int myid, String url) {
 		HttpGet httpGet = new HttpGet(url + "?myID=" + myid);
-		byte[] bytebuffer = null;
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
+			InputStream is = response.getEntity().getContent();
 
-			bytebuffer = new byte[(int) response.getEntity().getContentLength()];
-			response.getEntity().getContent().read(bytebuffer);
+			String s = "";
+			int c = is.read();
+			while (c >= 0) {
+				s = s + (char) c;
+				c = is.read();
+			}
+			return s;
+
 		} catch (Exception ex) {
-			Log.e("getString", ex.getLocalizedMessage());
+			ex.printStackTrace();
 		}
 
-		return new String(bytebuffer);
+		return null;
 	}
 }
