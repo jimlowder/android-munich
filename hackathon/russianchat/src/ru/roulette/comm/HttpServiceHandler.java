@@ -173,7 +173,6 @@ public class HttpServiceHandler {
 
 			String s = getStringFromEntity(response.getEntity());
 			
-			Log.d("getString", s);
 			return URLDecoder.decode(s);
 
 		} catch (ClientProtocolException ex) {
