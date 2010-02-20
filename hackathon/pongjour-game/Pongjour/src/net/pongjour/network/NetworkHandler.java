@@ -1,9 +1,17 @@
-package net.pongjour;
+package net.pongjour.network;
 
 import java.util.List;
 
+import net.pongjour.Player;
+
 public abstract class NetworkHandler {
 
+	public interface Notifications {
+		
+		public static String PLAYERS_CHANGED = "PLAYERS_CHANGED";
+	}
+	
+	
 	/**
 	 * Return the list of currently supported hosts (might use a callback?)
 	 * @return

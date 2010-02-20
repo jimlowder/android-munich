@@ -1,15 +1,18 @@
 package net.pongjour;
 
+import net.pongjour.network.NetworkHandler;
+import net.pongjour.network.NetworkHandlerImp;
+import net.pongjour.notifications.Notification;
+import net.pongjour.notifications.NotificationCenter;
+import net.pongjour.notifications.NotificationReceiver;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
-public class Pongjour extends Activity {
+public class Pongjour extends Activity implements NotificationReceiver {
 
 	private NetworkHandler _networkHandler;
 	
-	private Player _player;
-
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,14 +21,13 @@ public class Pongjour extends Activity {
 	}
 
 	private void registerNetwork() {
-//		WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-//		MulticastLock lock = wifi.createMulticastLock("mylock");
-//		lock.acquire();
-
+		NotificationCenter.addReceiver(this, NetworkHandler.Notifications.PLAYERS_CHANGED, null);
 		Player.register("my-name-" + (System.currentTimeMillis() % 100));
 		_networkHandler = new NetworkHandlerImp();
-//		lock.release();
 	}
-	
-	
+
+	@Override
+	public void receive(Notification notification) {
+		Log.d("Pongjour", notification.getName() +"->"+ notification.getUserInfo("object"));
+	}
 }
