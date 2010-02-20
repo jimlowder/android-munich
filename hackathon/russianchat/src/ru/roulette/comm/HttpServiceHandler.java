@@ -126,15 +126,15 @@ public class HttpServiceHandler {
 		Log.d("begin sendMessage", "---> " + myid + " " + toid + " -- "
 				+ message);
 
-		HttpGet httpPostRequest = new HttpGet(url + "?fromID=" + myid
+		HttpGet httpGetRequest = new HttpGet(url + "?fromID=" + myid
 				+ "&toID=" + toid + "&txt=" + message);
 		try {
-			Log.d("url", httpPostRequest.getURI().toString());
-			httpPostRequest.getURI().toURL().openConnection().connect();
-/*
-			 * if (response.getStatusLine().getStatusCode() != 200)
-			 * Log.d("sendMessage", response.getStatusLine().getReasonPhrase());
-			 */			
+			HttpResponse response = httpClient.execute(httpGetRequest);
+			
+			 if (response.getStatusLine().getStatusCode() != 200) {
+				 Log.d("sendMessage", response.getStatusLine().getReasonPhrase());
+			 }
+		
 		} catch (Exception ex) {
 			Log.e("sendMessage","sendMessage Error e="+ex);
 		}
