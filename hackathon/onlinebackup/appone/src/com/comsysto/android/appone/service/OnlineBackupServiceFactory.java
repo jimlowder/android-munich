@@ -6,9 +6,8 @@ public class OnlineBackupServiceFactory {
 	
 	public static OnlineBackupService getOnlineBackupService(){
 		if (service == null){
-			service = new OnlineBackupServiceMock();
+			service = new OnlineBackupServiceImpl();
 		}
 		return service;
-		
 	}
 }
