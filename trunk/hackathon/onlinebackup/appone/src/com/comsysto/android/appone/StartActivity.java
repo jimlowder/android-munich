@@ -24,14 +24,14 @@ public class StartActivity extends Activity {
 			}
 		});
 		
-//		Button buttonListContacts = (Button) findViewById(R.id.ButtonListContacts);
-//		buttonListContacts.setOnClickListener(new View.OnClickListener() {
-//			
-//			public void onClick(View arg0) {
-//				Intent var = new Intent(StartActivity.this, OBListActivity.class);
-//				startActivity(var);
-//			}
-//		});
+		Button buttonListContacts = (Button) findViewById(R.id.ButtonListContacts);
+		buttonListContacts.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View arg0) {
+				Intent var = new Intent(StartActivity.this, OBListActivity.class);
+				startActivity(var);
+			}
+		});
 		
 	}
 }
