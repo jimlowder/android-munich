@@ -31,14 +31,14 @@ public class RemoteListener implements RemoteBluetoothDeviceListener {
 	}
 
 	private void alert(String txt) {
-		activity.display(txt);
+//		activity.display(txt);
 		
-//		String deviceName;
-//		try {
-//			deviceName = remoteDevice.getName();
-//		} catch (BluetoothException e) {
-//			deviceName = remoteDevice.getAddress();
-//		}
-//		Toast.makeText(activity, txt + ": " + deviceName, Toast.LENGTH_LONG).show();
+		String deviceName;
+		try {
+			deviceName = remoteDevice.getName();
+		} catch (BluetoothException e) {
+			deviceName = remoteDevice.getAddress();
+		}
+		Toast.makeText(activity, txt + ": " + deviceName, Toast.LENGTH_LONG).show();
 	}
 }
