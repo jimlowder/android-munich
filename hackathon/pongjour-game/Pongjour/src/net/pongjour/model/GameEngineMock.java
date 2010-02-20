@@ -14,9 +14,9 @@ import android.graphics.PointF;
  * 
  */
 class GameEngineMock implements GameEngine {
-	
-	private float mOppRacketPosition = 0.5f;
-	private float mOppRacketNextDelta = 0.01f;
+
+    private float mOppRacketPosition = 0.5f;
+    private float mOppRacketNextDelta = 0.01f;
 
     static class Networking {
         PointF ballPos, ballSpeed;
@@ -95,12 +95,11 @@ class GameEngineMock implements GameEngine {
     }
 
     public float getOpponentRacketPosition() {
-    	if(mOppRacketPosition >= 1.0 || mOppRacketPosition <= 0) {
-    		mOppRacketNextDelta = -mOppRacketNextDelta;
-    	}
-    	mOppRacketPosition += mOppRacketNextDelta;
-    	return mOppRacketPosition;
-//        return opponent.getOppRacketPosition(getCurrentTime());
+        if (mOppRacketPosition >= 1.0 || mOppRacketPosition <= 0)
+            mOppRacketNextDelta = -mOppRacketNextDelta;
+        mOppRacketPosition += mOppRacketNextDelta;
+        return mOppRacketPosition;
+        // return opponent.getOppRacketPosition(getCurrentTime());
     }
 
     public int getOpponentScore() {
@@ -124,5 +123,10 @@ class GameEngineMock implements GameEngine {
 
     public void startGame() throws IOException {
         throw new RuntimeException("Not implemented yet!");
+    }
+
+    public void nextLoop() throws IOException {
+        // TODO Auto-generated method stub
+        
     }
 }

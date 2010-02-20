@@ -41,5 +41,7 @@ public interface GameEngine {
      * Signalisiert dem Gegner, wir sind bereit, von uns aus kann es los gehen.
      */
     void startGame() throws IOException;
+    
+    void nextLoop() throws IOException;
 
 }
