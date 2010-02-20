@@ -59,6 +59,7 @@ public class JSONController {
 			@RequestParam(value = "lastName", required = false) String lastName,
 			@RequestParam("eMail") String eMail,
 			@RequestParam(value = "phoneNumber", required = false) String phoneNumber) {
+		System.out.println("update request received with id : " + id);
 		if (id == null) {
 			id = Long.valueOf(RandomStringUtils.randomNumeric(10));
 		}
