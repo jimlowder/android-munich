@@ -15,7 +15,8 @@
             </intent-filter>
         </activity>
 
-    </application>
+    <activity android:name="PlayActivity"></activity>
+</application>
     <uses-sdk android:minSdkVersion="3" />
 
 
