@@ -29,7 +29,7 @@ public class DiagramActivity extends Activity {
 		XYDataset data = new XYDataset();
 		data.setColor(Color.BLUE);
 		data.setxValues(new double[]{ 0,1,2,3,4,5 });
-		data.setyValues(new double[]{ 4,2,3,1,2,1});
+		data.setyValues(new double[]{ 1,2,1,3,2,4 });
 		data.setAxis(yAxis);
 		
 		XYChart c = new XYChart(this);
