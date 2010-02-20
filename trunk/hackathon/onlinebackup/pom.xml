@@ -9,7 +9,8 @@
 	<name>Android's Parent Pom</name>
 	<url>http://www.comsysto.com</url>
 	<modules>
-		<module>serverone</module>
+		<module>voone</module>
+		<module>serverone</module>		
 	</modules>
 	<properties>
 		<org.springframework.version>3.0.1.RELEASE</org.springframework.version>
@@ -262,6 +263,16 @@
       		<version>1.5</version>
       		<scope>compile</scope>
   		</dependency>		
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.comsysto.android</groupId>
+			<artifactId>voone</artifactId>
+			<version>${project.version}</version>			
+		</dependency>		
 	</dependencies>
 	</dependencyManagement>
 	<repositories>
