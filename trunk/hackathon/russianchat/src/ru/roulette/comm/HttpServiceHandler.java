@@ -114,7 +114,6 @@ public class HttpServiceHandler {
 		try {
 			int id = 0;
 			HttpResponse response = httpClient.execute(httpGet);
-			is = response.getEntity().getContent();
 
 			String s = getStringFromEntity(response.getEntity());
 			if (s.length() > 0) {
@@ -129,7 +128,7 @@ public class HttpServiceHandler {
 
 			return ident;
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler getImage", ex.getClass().getName());
+			Log.e("HttpServerHandler"," getImage"+ex);
 		} finally {
 			if (is != null) {
 				try {
