@@ -38,7 +38,7 @@ public class XYChart extends YChart {
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		Log.v(TAG, "onLayout("+changed+","+left+","+top+","+right+","+bottom+")");
 		super.onLayout(changed, left, top, right, bottom);
-		xAxis.onLayout(changed, left, top, right, bottom);
+		xAxis.onLayout(changed, yAxis.getMeasuredWidth(), top, right, bottom);
 		yAxis.onLayout(changed, left, top, right, bottom);
 		if (y2AxisList != null)
 			for (ScaleAxis y2axis : y2AxisList) {
@@ -52,12 +52,11 @@ public class XYChart extends YChart {
 		scaleMatrix.mapPoints(mins);
 		
 		translateMatrix = new Matrix();
-		translateMatrix.setTranslate(-mins[0], getMeasuredHeight()-1-mins[1]);
+		translateMatrix.setTranslate(-mins[0]+yAxis.getMeasuredWidth(), getMeasuredHeight()-1-mins[1]);
 	}
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		Log.v(TAG, "onMeasure("+widthMeasureSpec+","+heightMeasureSpec+")");
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		xAxis.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		yAxis.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -68,15 +67,24 @@ public class XYChart extends YChart {
 	}
 	
 	private void drawAxis(Canvas c) {
-		Paint axisPaint = new Paint();
-		axisPaint.setColor(Color.WHITE);
-		axisPaint.setStrokeWidth(0);
-		float[] axis = new float[]{ (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX, (float) yAxis.getMinValue(),
-				(float) xAxis.getMinValue(), (float) xAxisAtY, (float) xAxis.getMaxValue(), (float) xAxisAtY };
+		Paint axisPaint = xAxis.getPaint();
+		float[] axis = new float[]{ (float) xAxis.getMinValue(), (float) xAxisAtY, (float) xAxis.getMaxValue(), (float) xAxisAtY };
 		scaleMatrix.mapPoints(axis);
 		translateMatrix.mapPoints(axis);
-		// Draw Axis
 		c.drawLines(axis, axisPaint);
+		
+		axisPaint = yAxis.getPaint();
+		axis = new float[]{ (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX, (float) yAxis.getMinValue() };
+		scaleMatrix.mapPoints(axis);
+		translateMatrix.mapPoints(axis);
+		c.drawLines(axis, axisPaint);
+		
+		for (double i = yAxis.getMinValue()+yAxis.getTickStart(); i <= yAxis.getMaxValue(); i+=yAxis.getTickInterval()) {
+			float[] tick = new float[]{(float)yAxisAtX-yAxis.getTickSizeOuter(), (float) i, (float)yAxisAtX+yAxis.getTickSizeInner(), (float) i};
+			scaleMatrix.mapPoints(tick);
+			translateMatrix.mapPoints(tick);
+			c.drawLines(tick, axisPaint);
+		}
 		
 		drawPfeil(c, axisPaint, 0.2f);
 	}
@@ -105,7 +113,7 @@ public class XYChart extends YChart {
 	protected void onDraw(Canvas c) {
 		drawData(c);
 		drawAxis(c);
-		super.paintText(c, "Y Achse", 100, 200);
+//		super.paintText(c, "Y Achse", 10, 10);
 	}
 	
 	private void drawPfeil(Canvas c, Paint axisPaint, float distance) {

@@ -1,5 +1,6 @@
 package com.googlecode.androidmuc.chart.axis;
 
+import android.graphics.Paint;
 import android.view.View;
 
 public abstract class Axis {
@@ -8,31 +9,25 @@ public abstract class Axis {
 		LEFT, RIGHT, TOP, BOTTOM
 	}
 	
-	int tickColor;
-	int tickSizeInner;
-	int tickSizeOuter;
+	Paint paint;
+	float tickSizeInner;
+	float tickSizeOuter;
 	String title;
 	
 	Position position;
 	int measuredWidth;
 	int measuredHeight;
 	
-	public int getTickColor() {
-		return tickColor;
-	}
-	public void setTickColor(int tickColor) {
-		this.tickColor = tickColor;
-	}
-	public int getTickSizeInner() {
+	public float getTickSizeInner() {
 		return tickSizeInner;
 	}
-	public void setTickSizeInner(int tickSizeInner) {
+	public void setTickSizeInner(float tickSizeInner) {
 		this.tickSizeInner = tickSizeInner;
 	}
-	public int getTickSizeOuter() {
+	public float getTickSizeOuter() {
 		return tickSizeOuter;
 	}
-	public void setTickSizeOuter(int tickSizeOuter) {
+	public void setTickSizeOuter(float tickSizeOuter) {
 		this.tickSizeOuter = tickSizeOuter;
 	}
 	public String getTitle() {
@@ -45,9 +40,9 @@ public abstract class Axis {
 		int width = View.MeasureSpec.getSize(widthMeasureSpec);
 		int height = View.MeasureSpec.getSize(heightMeasureSpec);
 		if (position == Position.LEFT || position == Position.RIGHT)
-			setMeasuredDimension(tickSizeInner+tickSizeOuter, height);
+			setMeasuredDimension((int) (tickSizeInner+tickSizeOuter), height);
 		else
-			setMeasuredDimension(width, tickSizeInner+tickSizeOuter);
+			setMeasuredDimension(width, (int) (tickSizeInner+tickSizeOuter));
 	}
 	public int getMeasuredWidth() {
 		return measuredWidth;
@@ -66,4 +61,11 @@ public abstract class Axis {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+	public Paint getPaint() {
+		return paint;
+	}
+	public void setPaint(Paint paint) {
+		this.paint = paint;
+	}
+	
 }

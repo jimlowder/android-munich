@@ -1,11 +1,16 @@
 package com.googlecode.androidmuc.chart.axis;
 
+import android.view.View;
+
+import java.text.SimpleDateFormat;
+
 public class ScaleAxis extends Axis {
 	double maxValue;
 	double minValue;
 	double tickInterval;
 	double tickStart;
 	float scaleFactor;
+	SimpleDateFormat labelFormat;
 	
 	public float getScaleFactor() {
 		return scaleFactor;
@@ -44,6 +49,20 @@ public class ScaleAxis extends Axis {
 		else
 			scaleFactor = (float) ((right-left)/(maxValue-minValue));
 	}
+	public void setLabelFormat(String pattern) {
+		labelFormat = new SimpleDateFormat(pattern);
+	}
+	public String getLabelForValue(double value) {
+		return labelFormat.format(value);
+	}
+	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		int width = View.MeasureSpec.getSize(widthMeasureSpec);
+		int height = View.MeasureSpec.getSize(heightMeasureSpec);
+		
+		if (position == Position.LEFT || position == Position.RIGHT)
+			setMeasuredDimension((int) (Math.max(paint.measureText(getLabelForValue(maxValue)), paint.measureText(getLabelForValue(minValue))) + tickSizeInner+tickSizeOuter), height);
+		else
+			setMeasuredDimension(width, (int) (tickSizeInner+tickSizeOuter + paint.getTextSize()));
+	}
 
-	
 }
