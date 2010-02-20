@@ -5,9 +5,21 @@
     android:layout_height="fill_parent"
     >
     <Button
-    	android:id="@+id/TestButton"
+    	android:id="@+id/TestButton1"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
-    	android:text="Test"
+    	android:text="Demo 1"
+    />
+    <Button
+    	android:id="@+id/TestButton2"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:text="Demo 2"
+    />
+    <Button
+    	android:id="@+id/TestButton3"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:text="Demo 3"
     />
 </LinearLayout>
