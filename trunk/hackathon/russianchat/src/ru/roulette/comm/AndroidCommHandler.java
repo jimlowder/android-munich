@@ -26,7 +26,7 @@ public class AndroidCommHandler implements CommHandler {
 	public int login(byte[] image) {
 		int id = this.serviceHandler.postData(image,
 				HttpServiceHandler.SERVERNAME + "logon");
-		Log.d("CommHandler", "My id : " + id);
+		Log.d("login", "My id : " + id);
 		return id;
 	}
 
@@ -34,6 +34,7 @@ public class AndroidCommHandler implements CommHandler {
 	public void message(int myid, int destid, String message) {
 		serviceHandler.sendMessage(myid, destid, message,
 				HttpServiceHandler.SERVERNAME + "message");
+		Log.d("message", "send message " + message);
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class AndroidCommHandler implements CommHandler {
 
 	@Override
 	public void logoff(int myid) {
-		serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "logoff");
+		serviceHandler.sendID(myid,HttpServiceHandler.SERVERNAME + "logoff");
 
 	}
 

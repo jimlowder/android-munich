@@ -3,11 +3,16 @@ package ru.roulette.comm;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -116,21 +121,24 @@ public class HttpServiceHandler {
 	}
 
 	public void sendMessage(int myid, int toid, String message, String url) {
-		HttpPost httpPostRequest = new HttpPost(url + "?fromID=" + myid
+		
+		message = URLEncoder.encode(message);
+		Log.d("begin sendMessage", "---> " + myid + " " + toid + " -- "
+				+ message);
+
+		HttpGet httpPostRequest = new HttpGet(url + "?fromID=" + myid
 				+ "&toID=" + toid + "&txt=" + message);
 		try {
-			httpPostRequest.setEntity(new StringEntity(message));
-
-			HttpResponse response = httpClient.execute(httpPostRequest);
-			if (response.getStatusLine().getStatusCode() != 200)
-				Log
-						.d("sendMessage", response.getStatusLine()
-								.getReasonPhrase());
+			Log.d("url", httpPostRequest.getURI().toString());
+			httpPostRequest.getURI().toURL().openConnection().connect();
+/*
+			 * if (response.getStatusLine().getStatusCode() != 200)
+			 * Log.d("sendMessage", response.getStatusLine().getReasonPhrase());
+			 */			
 		} catch (Exception ex) {
 			Log.e("sendMessage","sendMessage Error e="+ex);
 		}
-
-		Log.d("sendMessage","---> " + myid + " " + toid + " -- " + message);
+		Log.d("sendMessage", "---> " + myid + " " + toid + " -- " + message);
 	}
 
 	public String getString(int myid, String url) {
@@ -147,8 +155,8 @@ public class HttpServiceHandler {
 				s = s + (char) c;
 				c = is.read();
 			}
-			Log.d("getString" , s);
-			return s;
+			Log.d("getString", s);
+			return URLDecoder.decode(s);
 
 		} catch (ClientProtocolException ex) {
 			return null;
