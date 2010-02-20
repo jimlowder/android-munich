@@ -23,7 +23,8 @@
 	<TableRow>
 		<EditText android:id="@+id/msgInput" android:layout_height="fill_parent"
 			android:singleLine="false" android:lines="5" android:maxLines="5"
-			android:minLines="5" android:layout_width="fill_parent"></EditText>
+			android:minLines="5" android:layout_width="fill_parent"
+			android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine" android:imeOptions="actionSend"></EditText>
 		<Button android:text="@string/sendButton" android:id="@+id/sendButton"
 			android:layout_width="wrap_content" android:layout_height="fill_parent"
 			 android:layout_gravity="right" android:gravity="right"></Button>

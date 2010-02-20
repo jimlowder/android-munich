@@ -13,7 +13,7 @@
 <Button android:text="@string/nextButton" android:id="@+id/nextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="right"></Button>
 </LinearLayout>
 <EditText android:id="@+id/msgInput"
-		 android:layout_height="wrap_content"
+		 android:layout_height="wrap_content" android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine" android:imeOptions="actionSend"
 		 android:singleLine="false" android:lines="5" android:maxLines="5" android:minLines="5" android:layout_width="fill_parent"></EditText>
 <Button android:text="@string/sendButton" android:id="@+id/sendButton"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
