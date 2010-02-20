@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class Chat extends Activity implements Runnable {
 	
@@ -61,7 +64,42 @@ public class Chat extends Activity implements Runnable {
         commHandler = new CommHandlerMock();
     }
     
+    /**
+	 * Create the options menu for this activity {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.mainmenu, menu);
+		return true;
+	}
+	
+	/**
+	 * Gets called when an option from the menu got chosen. {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle all of the possible menu actions.
+		switch (item.getItemId()) {
+		case R.id.menuAbout:
+			//TODO show dialog
+			break;
+		case R.id.menuSettings:
+			//TODO settings
+			break;
+		default:
+			Log.e(TAG, "Unknown item selected in menu: " + item);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+    
     private void sendMsgInput() {
+    	if (this.destId == null) {
+    		Toast.makeText(Chat.this,
+					"Please click 'Next' first to log in.",
+					Toast.LENGTH_LONG).show();
+    	}
     	if (msgInput.getText() != null && this.destId != null) {
     		String message = msgInput.getText().toString();
     		commHandler.message(this.myId, this.destId.getId(), message);
