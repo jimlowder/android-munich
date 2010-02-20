@@ -15,7 +15,7 @@
 
 	<servlet-mapping>
 		<servlet-name>serverone</servlet-name>
-		<url-pattern>/serverone/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

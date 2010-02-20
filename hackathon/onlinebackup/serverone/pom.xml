@@ -6,13 +6,14 @@
 	<artifactId>serverone</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Server One</name>
+	<name>Server One</name>	
 	<parent>
 		<groupId>com.comsysto.android</groupId>
 		<artifactId>android-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<build>
+		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -62,12 +63,10 @@
 				</configuration>
 			</plugin>
 			<plugin>	
-        		<artifactId>maven-war-plugin</artifactId>
-        		<!-- 
+        		<artifactId>maven-war-plugin</artifactId> 
         		<configuration>
-          			<attachClasses>true</attachClasses>
+        			<finalName>${artifactId}</finalName>
         		</configuration>
-        		 -->
       		</plugin>
       		<plugin>
       			<groupId>org.apache.maven.plugins</groupId>
