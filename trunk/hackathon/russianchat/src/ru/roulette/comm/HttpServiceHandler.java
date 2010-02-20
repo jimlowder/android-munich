@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ProtocolException;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
@@ -103,7 +102,6 @@ public class HttpServiceHandler {
 			return ident;
 		} catch (Exception ex) {
 			Log.e("HttpServerHandler getImage", ex.getClass().getName());
-			ex.printStackTrace();
 		}
 
 		return null;
@@ -122,7 +120,7 @@ public class HttpServiceHandler {
 						.d("sendMessage", response.getStatusLine()
 								.getReasonPhrase());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log.e("sendMessage","sendMessage Error e="+ex);
 		}
 
 		Log.d("sendMessage","---> " + myid + " " + toid + " -- " + message);
@@ -150,7 +148,7 @@ public class HttpServiceHandler {
 		} catch (ProtocolException ex) {
 			return null;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log.e("sendMessage","getString Error e="+ex);
 		}
 
 		return null;
@@ -162,11 +160,9 @@ public class HttpServiceHandler {
 			HttpResponse response = httpClient.execute(httpGet);
 			response.getEntity();
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("sendMessage","sendID Error e="+e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("sendMessage","sendID Error e="+e);
 		}
 
 	}
