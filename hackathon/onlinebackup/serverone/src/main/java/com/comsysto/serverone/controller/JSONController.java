@@ -64,7 +64,9 @@ public class JSONController {
 		}
 		Contact contact = new Contact(id, firstName, lastName, eMail,
 				phoneNumber);
+		System.out.println("created new contact : " + contact);
 		dataSource.put(contact);
+		System.out.println("contact saved : " + contact);
 		return dataSource.all();
 	}
 
