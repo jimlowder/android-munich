@@ -65,38 +65,47 @@ public class XYChart extends YChart {
 		
 //		super.onDraw(c);
 		
-		Matrix matrix1 = new Matrix();
-		matrix1.setTranslate(0, 724);
-		Matrix matrix2 = new Matrix();
-		matrix2.setScale(30, -20);
+		Paint axisPaint = new Paint();
+		axisPaint.setColor(Color.WHITE);
+		axisPaint.setStrokeWidth(0);
 		
-		Paint mPaint = new Paint();
-		mPaint.setColor(Color.BLUE);
-		mPaint.setStrokeWidth(2);
-		mPaint.setAntiAlias(true);
-		mPaint.setStrokeCap(Cap.ROUND);
+		float[] pts = new float[]{ (float) yAxisAtX, (float) yAxis.getMaxValue(), (float) yAxisAtX, (float) yAxis.getMinValue(),
+				(float) xAxis.getMinValue(), (float) xAxisAtY, (float) xAxis.getMaxValue(), (float) xAxisAtY };
+		float[] mins = new float[] { (float) xAxis.getMinValue(), (float) yAxis.getMinValue()};
+
+		Matrix scaleMatrix = new Matrix();
+		scaleMatrix.setScale(xAxis.getScaleFactor(), yAxis.getScaleFactor());
+		scaleMatrix.mapPoints(pts);
+		scaleMatrix.mapPoints(mins);
 		
+		Matrix translateMatrix = new Matrix();
+		translateMatrix.setTranslate(-mins[0], getMeasuredHeight()-1-mins[1]);
+		translateMatrix.mapPoints(pts);
 		
-		Log.v(TAG, "canvas width   : " + c.getWidth());
-		Log.v(TAG, "canvas height  : " + c.getHeight());
-		Log.v(TAG, "matrix  : " + matrix1.toString());
-		Log.v(TAG, "measured width : " + getMeasuredWidth());
-		Log.v(TAG, "measured height: " + getMeasuredHeight());
-		Log.v(TAG, "clip rectangle : " + c.getClipBounds().toString());
+//		Log.v(TAG, "canvas width   : " + c.getWidth());
+//		Log.v(TAG, "canvas height  : " + c.getHeight());
+//		Log.v(TAG, "measured width : " + getMeasuredWidth());
+//		Log.v(TAG, "measured height: " + getMeasuredHeight());
+//		Log.v(TAG, "clip rectangle : " + c.getClipBounds().toString());
 	
-		float[] points = new float[] { 0, 0, 10, 10 };
-		matrix2.mapPoints(points);
-		matrix1.mapPoints(points);
 		
-		StringBuffer pointlist = new StringBuffer();
-		for (float f : points) {
-			pointlist.append(f);
-			pointlist.append(' ');
+		Paint dataPaint = new Paint();
+		dataPaint.setStrokeWidth(2);
+		for (XYDataset dat : data) {
+			dataPaint.setColor(dat.getColor());
+			pts = makePointArray(dat.getxValues(), dat.getyValues());
+			scaleMatrix.mapPoints(pts);
+			translateMatrix.mapPoints(pts);
+			StringBuffer pointlist = new StringBuffer();
+			for (float f : pts) {
+				pointlist.append(f);
+				pointlist.append(' ');
+			}
+			Log.v(TAG,pointlist.toString());
+			c.drawLines(pts, dataPaint);
 		}
-		Log.v(TAG,pointlist.toString());
 		// Draw Axis
-		c.drawLines(points, mPaint);
-//		c.drawLine(0, 0, 10, 10, mPaint);
+		c.drawLines(pts, axisPaint);
 	}
 	public double getyAxisAtX() {
 		return yAxisAtX;
@@ -117,4 +126,23 @@ public class XYChart extends YChart {
 	public void setData(List<XYDataset> data) {
 		this.data = data;
 	}
+	
+	private float[] makePointArray(double[] xValues, double[] yValues) {
+		if (xValues.length != yValues.length)
+			throw new IllegalArgumentException();
+		
+		float[] ret = new float[4*xValues.length];
+		int j = 0;
+		for (int i = 0; i < xValues.length; i++) {
+			ret[j++] = (float) xValues[i];
+			ret[j++] = (float) yValues[i];
+			if (i > 0 && i < xValues.length - 1) {
+				ret[j++] = (float) xValues[i];
+				ret[j++] = (float) yValues[i];
+			}
+		}
+		
+		return ret;
+	}
+	
 }

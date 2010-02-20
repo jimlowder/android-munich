@@ -40,7 +40,7 @@ public class ScaleAxis extends Axis {
 	}
 	public void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		if (position == Position.LEFT || position == Position.RIGHT)
-			scaleFactor = (float) ((bottom-top)/(maxValue-minValue));
+			scaleFactor = (float) ((top-bottom)/(maxValue-minValue));
 		else
 			scaleFactor = (float) ((right-left)/(maxValue-minValue));
 	}
