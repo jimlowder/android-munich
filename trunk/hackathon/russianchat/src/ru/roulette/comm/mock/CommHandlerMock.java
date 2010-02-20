@@ -1,5 +1,6 @@
 package ru.roulette.comm.mock;
 
+import ru.roulette.chat.R;
 import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
 
@@ -31,6 +32,9 @@ public class CommHandlerMock implements CommHandler {
 	public Identity nextIdentity() {
 		Identity identity = new Identity();
 		identity.setId(4712);
+		
+//		getResources().getDrawable( R.drawable.defaultuserimage);
+//		createBitmap(Bitmap src)
 		//identity.setImage(image)
 		return identity;
 	}
