@@ -1,3 +1,11 @@
 Story
 -----
 
+- Unmittelbar nach Start der App läuft der sound 'background'.
+- Sobald zwei Geräte syncronisiert sind, kommt der Sound 'flute' hinzu.
+- Sobald die Ausgangsstellung (vertikal ?) beider Geräte eingenommen wurde, 
+  entfällt 'flute' und 'background' wird leise. Der Zufalls-countdown
+  (3-7 Sekunden) wird gestartet. 
+- Nach Ablauf des Countdowns ertönt der Schrei des Kojoten. Ab jetzt
+  kann die Schussstellung (horizontal?) eingenommen und der Schuß ausgelöst werden.
+  
