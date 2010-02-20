@@ -176,6 +176,7 @@ public class Chat extends Activity implements Runnable {
 
 	};
     
+	// call back from take picture
 	public static void setImage(byte[] imageData) {
 		ownImage = imageData;
 		//TODO maybe remove later...
