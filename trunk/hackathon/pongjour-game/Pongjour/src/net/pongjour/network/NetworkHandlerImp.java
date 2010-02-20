@@ -1,17 +1,22 @@
-package net.pongjour;
+package net.pongjour.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
+import net.pongjour.Player;
+import net.pongjour.Util;
+import net.pongjour.notifications.NotificationCenter;
 import android.util.Log;
 
 public class NetworkHandlerImp extends NetworkHandler {
@@ -36,8 +41,9 @@ public class NetworkHandlerImp extends NetworkHandler {
 				String host = evt.getDNS().getHostName();
 				// _players.add(Player.fromString(info.toString()));
 				Player player = getPlayerFromEvent(evt);
-				if(!_players.contains(player)) {
+				if (!_players.contains(player)) {
 					_players.add(player);
+					notifyPlayersChanged(player);
 				}
 				log("serviceAdded:" + host + "->" + player);
 			}
@@ -52,7 +58,7 @@ public class NetworkHandlerImp extends NetworkHandler {
 				ServiceInfo info = evt.getInfo();
 				Hashtable<String, String> props = new Hashtable<String, String>();
 				if (info == null) {
-					info = _jmdns.getServiceInfo(PONGJOUR_ID, info.getName());
+					info = _jmdns.getServiceInfo(PONGJOUR_ID, evt.getName());
 				}
 				if (info != null) {
 					for (Enumeration<String> iterator = info.getPropertyNames(); iterator.hasMoreElements();) {
@@ -68,7 +74,14 @@ public class NetworkHandlerImp extends NetworkHandler {
 				String host = evt.getDNS().getHostName();
 				Player player = getPlayerFromEvent(evt);
 				_players.remove(player);
-				log("serviceRemoved: " + host + "->" +player);
+				notifyPlayersChanged(player);
+				log("serviceRemoved: " + host + "->" + player);
+			}
+
+			private void notifyPlayersChanged(Player player) {
+				Map<String, Object> userInfo = new HashMap<String, Object>();
+				userInfo.put("object", player);
+				NotificationCenter.postNotification(Notifications.PLAYERS_CHANGED, NetworkHandlerImp.this, userInfo);
 			}
 
 			@Override
