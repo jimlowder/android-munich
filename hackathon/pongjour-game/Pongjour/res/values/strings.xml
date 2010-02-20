@@ -10,7 +10,7 @@
     <string name="menu_medium">Medium</string>
     <string name="menu_hard">Hard</string>
     
-    <string name="mode_ready">Lunar Lander\nPress Up To Play</string>
+    <string name="mode_ready">Pongjour \nPress Up To Play</string>
 	<string name="mode_pause">Paused\nPress Up To Resume</string>
 	<string name="mode_lose">Game Over\nPress Up To Play</string>
 	<string name="mode_win_prefix">Success!\n</string> 

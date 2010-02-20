@@ -9,7 +9,7 @@ public interface GameEngine {
 
     static class Factory {
         public static GameEngine getInstance(final SocketAddress addr) throws IOException {
-            return new GameEngineImpl(addr);
+            return new GameEngineMock(addr);
         }
     }
 
