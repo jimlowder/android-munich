@@ -1,6 +1,7 @@
 package com.comsysto.android.appone;
 
 import com.comsysto.android.appone.*;
+import com.comsysto.android.appone.service.OnlineBackupServiceFactory;
 import com.comsysto.vooone.*;
 
 import android.app.Activity;
@@ -42,6 +43,7 @@ public class ContactCreation extends Activity {
 				EditText phoneNumber = (EditText)findViewById(R.id.phoneNumber);
 				contact.setPhoneNumber(phoneNumber.getText().toString());
 				
+				OnlineBackupServiceFactory.getOnlineBackupService().createContact(contact);
 				finish();
 			}
 		});
