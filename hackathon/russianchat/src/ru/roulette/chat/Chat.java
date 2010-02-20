@@ -1,6 +1,8 @@
 package ru.roulette.chat;
 
 
+import ru.roulette.comm.CommHandler;
+import ru.roulette.comm.Identity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,13 @@ public class Chat extends Activity {
 	
 	private static EditText msgInput;
 	private static EditText msgOutput;
+	
+	private int myId = 0;
+	private Identity destId = null;
+	private byte[] image;
+	
+	CommHandler commHandler;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -38,18 +47,27 @@ public class Chat extends Activity {
 			}
 		});
         msgInput = (EditText) findViewById(R.id.msgInput);
+        msgInput.requestFocus();
         msgOutput = (EditText) findViewById(R.id.msgOutput);
     }
     
     private void sendMsgInput() {
-    	if (this.msgInput.getText() != null) {
-    		String msg = this.msgInput.getText().toString();
-    		//TODO send to server
+    	if (msgInput.getText() != null && this.destId != null) {
+    		String message = msgInput.getText().toString();
+    		commHandler.message(this.myId, this.destId.getId(), message);
+    		msgInput.requestFocus();
     	}
     }
     
     private void nextChatContact() {
-    	// TODO get next chat contact from server
-    	
+    	if (this.myId == 0) {
+    		// login
+    		this.myId = commHandler.login(this.image);
+    	}
+		// get next chat contact from server
+    	this.destId = commHandler.nextIdentity();
+
+    	// TODO ? no next id found
+    	// TODO ? old id == new id
     }
 }
