@@ -116,13 +116,7 @@ public class HttpServiceHandler {
 			HttpResponse response = httpClient.execute(httpGet);
 			is = response.getEntity().getContent();
 
-			String s = "";
-			int c = is.read();
-			while (c >= 0) {
-				s = s + (char) c;
-				c = is.read();
-			}
-
+			String s = getStringFromEntity(response.getEntity());
 			if (s.length() > 0) {
 				id = Integer.parseInt(s);
 			}
@@ -177,14 +171,9 @@ public class HttpServiceHandler {
 			HttpResponse response = httpClient.execute(httpGet);
 			if (response.getEntity() == null)
 				return null;
-			InputStream is = response.getEntity().getContent();
 
-			String s = "";
-			int c = is.read();
-			while (c >= 0) {
-				s = s + (char) c;
-				c = is.read();
-			}
+			String s = getStringFromEntity(response.getEntity());
+			
 			Log.d("getString", s);
 			return URLDecoder.decode(s);
 
@@ -211,4 +200,5 @@ public class HttpServiceHandler {
 		}
 
 	}
+	
 }
