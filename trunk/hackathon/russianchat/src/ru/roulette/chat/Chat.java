@@ -4,6 +4,7 @@ import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
 import ru.roulette.comm.mock.CommHandlerMock;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +30,7 @@ public class Chat extends Activity implements Runnable {
 	
 	private int myId = 0;
 	private Identity destId = null;
-	private byte[] image;
+	private static byte[] ownImage;
 	
 	private String message;
 	
@@ -85,7 +86,9 @@ public class Chat extends Activity implements Runnable {
 			//TODO show dialog
 			break;
 		case R.id.menuSettings:
-			//TODO settings
+			Intent intent = new Intent();
+			intent.setClass(Chat.this, Settings.class);
+			startActivity(intent);
 			break;
 		default:
 			Log.e(TAG, "Unknown item selected in menu: " + item);
@@ -111,7 +114,7 @@ public class Chat extends Activity implements Runnable {
     private void nextChatContact() {
     	if (this.myId == 0) {
     		// login
-    		this.myId = commHandler.login(this.image);
+    		this.myId = commHandler.login(this.ownImage);
     		Thread thread = new Thread(this);
     		thread.start();
     	}
@@ -151,4 +154,7 @@ public class Chat extends Activity implements Runnable {
 
 	};
     
+	public static void setImage(byte[] imageData) {
+		ownImage = imageData;
+	}
 }
