@@ -39,4 +39,10 @@ public class CommHandlerMock implements CommHandler {
 		return identity;
 	}
 
+	@Override
+	public void logoff(int myid) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

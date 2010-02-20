@@ -1,10 +1,13 @@
 package ru.roulette.comm;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.ProtocolException;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -95,6 +98,8 @@ public class HttpServiceHandler {
 			ident.setId(id);
 			ident.setImage(null);
 
+			Log.d("getImage", "My chat partner: " + id);
+
 			return ident;
 		} catch (Exception ex) {
 			Log.e("HttpServerHandler getImage", ex.getClass().getName());
@@ -119,12 +124,16 @@ public class HttpServiceHandler {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
+		Log.d("sendMessage","---> " + myid + " " + toid + " -- " + message);
 	}
 
 	public String getString(int myid, String url) {
 		HttpGet httpGet = new HttpGet(url + "?myID=" + myid);
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
+			if (response.getEntity() == null)
+				return null;
 			InputStream is = response.getEntity().getContent();
 
 			String s = "";
@@ -133,12 +142,32 @@ public class HttpServiceHandler {
 				s = s + (char) c;
 				c = is.read();
 			}
+			Log.d("getString" , s);
 			return s;
 
+		} catch (ClientProtocolException ex) {
+			return null;
+		} catch (ProtocolException ex) {
+			return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
 		return null;
+	}
+
+	public void sendID(int myid, String url) {
+		HttpGet httpGet = new HttpGet(url + "?myID=" + myid);
+		try {
+			HttpResponse response = httpClient.execute(httpGet);
+			response.getEntity();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
