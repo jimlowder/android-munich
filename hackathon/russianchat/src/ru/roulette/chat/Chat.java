@@ -128,7 +128,9 @@ public class Chat extends Activity implements Runnable {
     	}
     	if (msgInput.getText() != null && this.destId != null) {
     		String message = msgInput.getText().toString();
+    		Log.i(TAG,"sending message="+message+" to id="+this.destId.getId());
     		commHandler.message(this.myId, this.destId.getId(), message);
+    		Log.i(TAG,"message sent");
     		msgInput.setText(""); //clear input
     		msgInput.requestFocus();
     	}
@@ -137,7 +139,9 @@ public class Chat extends Activity implements Runnable {
     private void nextChatContact() {
     	if (this.myId == 0) {
     		// login
+    		Log.i(TAG,"starting login....");
     		this.myId = commHandler.login(ownImage);
+    		Log.i(TAG,"Logged in with id="+this.myId);
     		Thread thread = new Thread(this);
     		thread.start();
     	}
