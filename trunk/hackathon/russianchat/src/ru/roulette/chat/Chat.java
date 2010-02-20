@@ -3,7 +3,6 @@ package ru.roulette.chat;
 import ru.roulette.comm.AndroidCommHandler;
 import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
-import ru.roulette.comm.mock.CommHandlerMock;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -92,8 +91,9 @@ public class Chat extends Activity implements Runnable {
 			break;
 		case R.id.menuSettings:
 			Intent intent = new Intent();
-			intent.setClass(Chat.this, Settings.class);
-			startActivity(intent);
+			intent.setClass(Chat.this, Settings.class);	
+			// start the new activity
+			startActivityForResult(intent, 1);
 			break;
 		default:
 			Log.e(TAG, "Unknown item selected in menu: " + item);
@@ -177,12 +177,15 @@ public class Chat extends Activity implements Runnable {
 
 	};
     
-	// call back from take picture
-	public static void setImage(byte[] imageData) {
-		ownImage = imageData;
-		//TODO maybe remove later...
-		if (ownImage != null) {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Bundle bundle = data.getExtras();
+		if (data != null && bundle != null) {
+			ownImage = (byte[]) bundle.getSerializable("picture");
 			userImage.setImageBitmap(BitmapFactory.decodeByteArray(ownImage, 0, ownImage.length));
 		}
-	}
+		
+	};
+	
 }
