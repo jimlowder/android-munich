@@ -5,14 +5,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author danielbartl
- *
+ * 
  */
 @Controller
+@RequestMapping("/json")
 public class JSONController {
 
 	@RequestMapping("hello")
-	public String test(){
-		return "Hello!";
+	public String hello() {
+		throw new IllegalStateException("Not implemented yet");
 	}
-	
+
 }
