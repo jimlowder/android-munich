@@ -2,7 +2,6 @@ package com.googlecode.androidmuc.chart.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -84,6 +83,10 @@ public class XYChart extends YChart {
 			scaleMatrix.mapPoints(tick);
 			translateMatrix.mapPoints(tick);
 			c.drawLines(tick, axisPaint);
+			tick = new float[]{(float)yAxisAtX-yAxis.getTickSizeOuter(), (float) i};
+			scaleMatrix.mapPoints(tick);
+			translateMatrix.mapPoints(tick);
+			c.drawText(yAxis.getLabelForValue(i), tick[0], tick[1],axisPaint);
 		}
 		
 		drawPfeil(c, axisPaint, 0.2f);

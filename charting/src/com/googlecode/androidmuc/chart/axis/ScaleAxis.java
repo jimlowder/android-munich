@@ -2,7 +2,7 @@ package com.googlecode.androidmuc.chart.axis;
 
 import android.view.View;
 
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 
 public class ScaleAxis extends Axis {
 	double maxValue;
@@ -10,7 +10,7 @@ public class ScaleAxis extends Axis {
 	double tickInterval;
 	double tickStart;
 	float scaleFactor;
-	SimpleDateFormat labelFormat;
+	DecimalFormat labelFormat;
 	
 	public float getScaleFactor() {
 		return scaleFactor;
@@ -50,7 +50,7 @@ public class ScaleAxis extends Axis {
 			scaleFactor = (float) ((right-left)/(maxValue-minValue));
 	}
 	public void setLabelFormat(String pattern) {
-		labelFormat = new SimpleDateFormat(pattern);
+		labelFormat = new DecimalFormat(pattern);
 	}
 	public String getLabelForValue(double value) {
 		return labelFormat.format(value);
