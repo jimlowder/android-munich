@@ -136,7 +136,7 @@ public class Chat extends Activity implements Runnable {
     private void nextChatContact() {
     	if (this.myId == 0) {
     		// login
-    		this.myId = commHandler.login(this.ownImage);
+    		this.myId = commHandler.login(ownImage);
     		Thread thread = new Thread(this);
     		thread.start();
     	}
@@ -178,5 +178,9 @@ public class Chat extends Activity implements Runnable {
     
 	public static void setImage(byte[] imageData) {
 		ownImage = imageData;
+		//TODO maybe remove later...
+		if (ownImage != null) {
+			userImage.setImageBitmap(BitmapFactory.decodeByteArray(ownImage, 0, ownImage.length));
+		}
 	}
 }
