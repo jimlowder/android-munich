@@ -106,6 +106,8 @@ public class XYChart extends YChart {
 		}
 		// Draw Axis
 		c.drawLines(pts, axisPaint);
+		
+		super.paintText(c, "Y Achse", 100, 200);
 	}
 	public double getyAxisAtX() {
 		return yAxisAtX;
