@@ -66,5 +66,13 @@ public class Contact {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("ID: ").append(id).append("\nFirstName :").append(firstName).append("\nLastName: ")
+				.append(lastName).append("\neMail: ").append(eMail).append(
+						"\nPhone: ").append(phoneNumber).append("\n");
+		return buffer.toString();
+	}
 
 }
