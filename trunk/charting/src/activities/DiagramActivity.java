@@ -20,10 +20,10 @@ public class DiagramActivity extends Activity {
 //		Bundle bundle = getIntent().getExtras();
 		
 		ScaleAxis xAxis = new ScaleAxis();
-		xAxis.setMinValue(0d);
+		xAxis.setMinValue(-0.2d);
 		xAxis.setMaxValue(5d);
 		ScaleAxis yAxis = new ScaleAxis();
-		yAxis.setMinValue(0d);
+		yAxis.setMinValue(-0.2d);
 		yAxis.setMaxValue(5d);
 		
 		XYDataset data = new XYDataset();
