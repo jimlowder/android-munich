@@ -1,6 +1,7 @@
 package ru.roulette.comm;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,7 +32,7 @@ import android.util.Log;
 
 public class HttpServiceHandler {
 
-	public final static String SERVERNAME = "http://192.168.0.167:8000/";
+	public final static String SERVERNAME = "http://192.68.211.109:8000/";
 
 	private HttpClient httpClient;
 
@@ -108,7 +109,30 @@ public class HttpServiceHandler {
 		return sb.toString();
 	}
 	
-	public Identity getImage(String url) {
+	private static byte[] getBytesFromEntity(HttpEntity entity) {
+		InputStreamReader reader = null;
+		try {
+			InputStream content = entity.getContent();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			bos.write(content.read());
+			byte[] ba = bos.toByteArray();
+			return ba;
+			
+		} catch (IOException e) {
+			Log.e("http", "Error while reading inputstream: " + e);
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					Log.e("http", "Error while closing reader: " + e);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Identity nextIdentity(String url) {
 		HttpGet httpGet = new HttpGet(url);
 		InputStream is = null;
 		try {
@@ -138,7 +162,19 @@ public class HttpServiceHandler {
 				}
 			}
 		}
-
+		return null;
+	}
+	
+	public byte[] getImage(String url) {
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse response = httpClient.execute(httpGet);
+			byte[] bytes = getBytesFromEntity(response.getEntity());
+			Log.d("getImage", "got image");
+			return bytes;
+		} catch (Exception ex) {
+			Log.e("HttpServerHandler"," getImage"+ex);
+		} 
 		return null;
 
 	}

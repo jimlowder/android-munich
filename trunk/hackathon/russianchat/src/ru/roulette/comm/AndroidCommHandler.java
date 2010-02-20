@@ -39,7 +39,11 @@ public class AndroidCommHandler implements CommHandler {
 
 	@Override
 	public Identity nextIdentity() {
-		return serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "next");
+		Identity identity = serviceHandler.nextIdentity(HttpServiceHandler.SERVERNAME + "next");
+		int id = identity.getId();
+		byte[] image = serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "image/"+id);
+		identity.setImage(image);
+		return identity;
 	}
 
 	@Override
