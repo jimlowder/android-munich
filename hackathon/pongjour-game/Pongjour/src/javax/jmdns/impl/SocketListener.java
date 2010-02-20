@@ -60,6 +60,8 @@ class SocketListener implements Runnable {
                }
             } catch (IOException e) {
                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
          }
       } catch (IOException e) {
