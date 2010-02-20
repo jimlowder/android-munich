@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings.System;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.ImageView;
 
 public class catfur extends Activity {
      
@@ -22,6 +22,8 @@ public class catfur extends Activity {
 	private float diffY;
 	private long upTime;
 	private long crawlLimit = 1000; // Time in milliseconds 
+	private boolean isStartup = true;
+	
 
 	/** Called when the activity is first created. */
     @Override
@@ -54,6 +56,11 @@ public class catfur extends Activity {
         			Log.d("Cat", "Touch: dx,dy="+deltaX+';'+deltaY);
         			MediaPlayer player = MediaPlayer.create(this, R.raw.catmeow);
         			player.start();
+        			if (isStartup){
+        				isStartup = false;
+        				ImageView imageView = (ImageView) findViewById(R.id.ImageView01);
+        				imageView.setImageResource(R.drawable.catsfur);
+        			}
         			
         			} else {
         				
@@ -63,7 +70,7 @@ public class catfur extends Activity {
                 			MediaPlayer player = MediaPlayer.create(this, R.raw.catpurr2);
                 			player.start();
         				} else {
-                			MediaPlayer player = MediaPlayer.create(this, R.raw.catpurr2);
+                			MediaPlayer player = MediaPlayer.create(this, R.raw.catmeow);
                 			player.start();
                 			player.start();
             				Log.d("Cat", "Pet: dx,dy/lastPetTime="+deltaX+';'+deltaY+'/'+lastPetTime);
