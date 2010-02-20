@@ -1,0 +1,9 @@
+flute.mp3:
+ haunted_canyon_flute.mp3 by http://www.freesound.org User::kerri
+background.mp3:
+ wind1.wav by http://www.freesound.org User Anton Woldhek
+ meadow ambience.WAV by http://www.freesound.org User::eric5335
+howl.mp3:
+ 00839 dog howl 1.wav by http://www.freesound.org User::Robinhood76
+bang.mp3:
+ Gun-Shot Gun(one shot).wav by http://www.freesound.org User::Shades
