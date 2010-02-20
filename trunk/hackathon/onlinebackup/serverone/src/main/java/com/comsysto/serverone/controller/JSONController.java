@@ -18,9 +18,9 @@ import com.comsysto.vooone.Contact;
 @RequestMapping("/rest")
 public class JSONController {
 
-	@RequestMapping(value = "contacts", method = RequestMethod.GET)
+	@RequestMapping(value = "contacts/mock", method = RequestMethod.GET)
 	public @ResponseBody
-	List<Contact> getContacts() {
+	List<Contact> getContactsForTesting() {
 		List<Contact> contacts = new ArrayList<Contact>();
 		Contact c1 = new Contact();
 		c1.setFirstName("Max");
@@ -29,6 +29,14 @@ public class JSONController {
 		c1.setPhoneNumber("+ 49 170 123456");
 		contacts.add(c1);
 		return contacts;
+	}
+
+	@RequestMapping(value = "contacts", method = RequestMethod.GET)
+	public @ResponseBody
+	List<Contact> getContacts() {
+		List<Contact> contacts = new ArrayList<Contact>();
+		return contacts;
 
 	}
+
 }
