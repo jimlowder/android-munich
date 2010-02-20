@@ -12,9 +12,14 @@ public class AndroidCommHandler implements CommHandler {
 
 	@Override
 	public String getMyMessages(int myid) {
-		return this.serviceHandler.getString(myid,
+		String s = this.serviceHandler.getString(myid,
 				HttpServiceHandler.SERVERNAME + "poll");
+		String deb = "null";
+		if (s != null)
+			deb = s;
 
+		Log.d("getMyMessages: ", deb);
+		return s;
 	}
 
 	@Override
@@ -34,6 +39,12 @@ public class AndroidCommHandler implements CommHandler {
 	@Override
 	public Identity nextIdentity() {
 		return serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "next");
+	}
+
+	@Override
+	public void logoff(int myid) {
+		serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "logoff");
+
 	}
 
 }
