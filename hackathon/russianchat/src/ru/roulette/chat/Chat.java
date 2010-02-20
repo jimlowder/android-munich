@@ -4,6 +4,8 @@ import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
 import ru.roulette.comm.mock.CommHandlerMock;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,7 +22,9 @@ import android.widget.Toast;
 
 public class Chat extends Activity implements Runnable {
 	
-	final private static String TAG="Chat";
+	private static final int DIALOG_ABOUT = 0;
+
+    final private static String TAG="Chat";
 	
 	private static Button sendButton;
 	private static Button nextButton;
@@ -83,7 +87,7 @@ public class Chat extends Activity implements Runnable {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
 		case R.id.menuAbout:
-			//TODO show dialog
+			showDialog(DIALOG_ABOUT);
 			break;
 		case R.id.menuSettings:
 			Intent intent = new Intent();
@@ -95,6 +99,24 @@ public class Chat extends Activity implements Runnable {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+	    Dialog dialog;
+	    switch (id) {
+        case DIALOG_ABOUT:
+            Builder builder = new Builder(this);
+            builder.setView(getLayoutInflater().inflate(R.layout.about, null));
+            builder.setPositiveButton(R.string.okButton, null);
+            builder.setIcon(R.drawable.icon);
+            dialog = builder.create();
+            break;
+        default:
+            dialog = null;
+            break;
+        }
+	    return dialog;
 	}
     
     private void sendMsgInput() {
