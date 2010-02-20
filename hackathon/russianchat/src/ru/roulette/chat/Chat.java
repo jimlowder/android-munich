@@ -153,7 +153,7 @@ public class Chat extends Activity implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			if (this.destId != null) {
+			if (this.myId != 0) {
 				this.message = commHandler.getMyMessages(this.myId);
 				handler.sendEmptyMessage(0);				
 				try {
