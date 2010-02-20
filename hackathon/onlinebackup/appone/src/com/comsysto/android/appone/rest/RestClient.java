@@ -13,8 +13,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.ClientParamsStack;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +37,7 @@ public class RestClient {
 
 	private static final String HOST = "http://10.0.2.2:8080/rest/";
 	private static final String GET_URL =  HOST + "contacts";
-	private static final String CREATE_URL = HOST + "contact?";
+	private static final String CREATE_URL = HOST + "contact";
 	
 
 
@@ -95,11 +100,12 @@ public class RestClient {
 				JSONArray json = new JSONArray(result);
 				for (int i = 0; i < json.length(); i++) {
 					Contact contact = new Contact();
-					JSONObject jsonObject = new JSONObject(json.getString(0));
+					JSONObject jsonObject = new JSONObject(json.getString(i));
 					contact.setFirstName(jsonObject.getString("firstName"));
 					contact.setLastName(jsonObject.getString("lastName"));
 					contact.seteMail(jsonObject.getString("eMail"));
 					contact.setPhoneNumber(jsonObject.getString("phoneNumber"));
+					contact.setId(jsonObject.getLong("id"));
 					contacts.add(contact);
 					Log.i("Kontakt erhalten: ", contact.toString());
 				}
@@ -119,29 +125,37 @@ public class RestClient {
 	}
 
 	public static void createContact(Contact contact) {
+		Log.i("Trying to add new Contact", contact.toString());
 		HttpClient httpclient = new DefaultHttpClient();
 
 		// Prepare a request object
-		HttpPut httpPut = new HttpPut(createContactURL(contact));
+		HttpPut httpPut = new HttpPut(CREATE_URL);
+		httpPut.setParams(createParams(contact));
 		Log.i("Trying to connect to URL: ", httpPut.getURI().toString());
 
 		// Execute the request
 		try {
 			HttpResponse response = httpclient.execute(httpPut);
+			Log.i("Response status : ", response.getStatusLine().toString());
+			Log.i("Trying to add Contact: ", "success");
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+
 	}
 
-	private static String createContactURL(Contact contact) {
-		String url = CREATE_URL + "id=" + contact.getId() + "&firstName="
-				+ contact.getFirstName() + " &lastName="
-				+ contact.getLastName() + "&phoneNumber="
-				+ contact.getPhoneNumber() + "&eMail=" + contact.geteMail();
-		return url;
+	private static HttpParams createParams(Contact contact) {
+		BasicHttpParams params = new BasicHttpParams();
+		params.setParameter("id", contact.getId());
+		params.setParameter("firstName", contact.getFirstName());
+		params.setParameter("lastName", contact.getLastName());
+		params.setParameter("eMail", contact.geteMail());
+		params.setParameter("phoneNumber", contact.getPhoneNumber());
+		return params;
 	}
+
 
 }
