@@ -2,17 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:orientation="vertical"
 	android:layout_height="fill_parent">
-	<TableLayout android:layout_weight="50" android:layout_height="fill_parent" android:layout_width="fill_parent" android:stretchColumns="1">
+	<TableLayout android:layout_weight="50" android:layout_height="fill_parent" android:layout_width="fill_parent" android:stretchColumns="2">
 	<TableRow>
-		<LinearLayout android:orientation="vertical"
-			android:layout_width="wrap_content" android:layout_height="fill_parent">
-			<ImageView android:id="@+id/picture" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
-				android:src="@drawable/icon"></ImageView>
-			<Button android:text="@string/nextButton" android:id="@+id/nextButton"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_gravity="right"></Button>
-		</LinearLayout>
+		<ImageView android:id="@+id/picture" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+			android:src="@drawable/icon" android:maxWidth="120dip" android:maxHeight="120dip"
+			android:minWidth="120dip" android:minHeight="120dip"></ImageView>
+		<Button android:text="@string/nextButton" android:id="@+id/nextButton"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"></Button>
 		<EditText android:id="@+id/msgOutput" android:enabled="false" android:focusable="false"
 			android:layout_height="wrap_content" android:gravity="right"
 			android:singleLine="false" android:lines="5" android:maxLines="5"
