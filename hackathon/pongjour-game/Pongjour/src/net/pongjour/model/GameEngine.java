@@ -1,8 +1,17 @@
 package net.pongjour.model;
 
+import java.net.SocketAddress;
+
 import android.graphics.PointF;
 
 public interface GameEngine {
+
+	static class Factory {
+		public static GameEngine getInstance(final SocketAddress addr) {
+			return new GameEngineImpl(addr);
+		}
+	}
+
 	PointF getBallPosition();
 
 	/**
