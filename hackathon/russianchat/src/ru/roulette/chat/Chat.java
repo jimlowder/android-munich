@@ -95,6 +95,10 @@ public class Chat extends Activity implements Runnable {
 			// start the new activity
 			startActivityForResult(intent, 1);
 			break;
+		case R.id.menuLogout:
+			commHandler.logoff(this.myId);
+			this.myId = 0;
+			break;
 		default:
 			Log.e(TAG, "Unknown item selected in menu: " + item);
 			break;
@@ -196,6 +200,7 @@ public class Chat extends Activity implements Runnable {
 	protected void onDestroy() {
 		super.onDestroy();
 		commHandler.logoff(this.myId);
+		this.myId = 0;
 	}
 	
 }
