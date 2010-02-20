@@ -12,6 +12,10 @@ public class Identity {
 		this.id = id;
 	}
 
+	public void setId(String s) {
+		this.id = Integer.parseInt(s.substring(0,s.indexOf(".")));
+	}
+
 	public byte[] getImage() {
 		return image;
 	}
