@@ -21,13 +21,12 @@
     </TableLayout>
 	<TableLayout android:layout_weight="50" android:layout_height="fill_parent" android:layout_width="fill_parent" android:stretchColumns="0">
 	<TableRow>
-		<EditText android:id="@+id/msgInput" android:layout_height="fill_parent"
+		<EditText android:id="@+id/msgInput" android:layout_height="wrap_content"
 			android:singleLine="false" android:lines="5" android:maxLines="5"
-			android:minLines="5" android:layout_width="fill_parent"
+			android:minLines="5" android:layout_width="fill_parent" android:maxWidth="400dip"
 			android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine" android:imeOptions="actionSend"></EditText>
 		<Button android:text="@string/sendButton" android:id="@+id/sendButton"
-			android:layout_width="wrap_content" android:layout_height="fill_parent"
-			 android:layout_gravity="right" android:gravity="right"></Button>
+			android:layout_width="wrap_content" android:layout_gravity="center_vertical" android:gravity="right" android:layout_height="wrap_content"></Button>
     </TableRow>
     </TableLayout>
 </LinearLayout>
