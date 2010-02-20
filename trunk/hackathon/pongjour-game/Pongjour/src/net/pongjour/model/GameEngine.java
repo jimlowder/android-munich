@@ -35,11 +35,11 @@ public interface GameEngine {
 
     float getRacketWidth();
 
-    void setMyRacketPosition(float p);
+    void setMyRacketPosition(float p) throws IOException;
 
     /**
      * Signalisiert dem Gegner, wir sind bereit, von uns aus kann es los gehen.
      */
-    void startGame();
+    void startGame() throws IOException;
 
 }

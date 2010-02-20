@@ -131,7 +131,7 @@ class GameEngineImpl implements GameEngine {
         return 0.25f;
     }
 
-    public void setMyRacketPosition(final float p) {
+    public void setMyRacketPosition(final float p) throws IOException {
         setMyRacketPosition(getCurrentTime(), p);
     }
 
@@ -141,7 +141,7 @@ class GameEngineImpl implements GameEngine {
         opponent.setMyRacketPosition(t, p);
     }
 
-    public void startGame() {
+    public void startGame() throws IOException {
         throw new RuntimeException("Not implemented yet!");
     }
 }
