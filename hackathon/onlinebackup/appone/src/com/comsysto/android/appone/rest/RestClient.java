@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,8 +31,8 @@ import android.util.Log;
 public class RestClient {
 
 	private static final String HOST = "http://10.0.2.2:8080/rest/";
-	private static final String GET_URL =  HOST + "contacts/mock";
-	private static final String CREATE_URL = HOST + "contact/mock?";
+	private static final String GET_URL =  HOST + "contacts";
+	private static final String CREATE_URL = HOST + "contact?";
 	
 
 
@@ -121,12 +122,12 @@ public class RestClient {
 		HttpClient httpclient = new DefaultHttpClient();
 
 		// Prepare a request object
-		HttpGet httpget = new HttpGet(createContactURL(contact));
-		Log.i("Trying to connect to URL: ", httpget.getURI().toString());
+		HttpPut httpPut = new HttpPut(createContactURL(contact));
+		Log.i("Trying to connect to URL: ", httpPut.getURI().toString());
 
 		// Execute the request
 		try {
-			HttpResponse response = httpclient.execute(httpget);
+			HttpResponse response = httpclient.execute(httpPut);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
