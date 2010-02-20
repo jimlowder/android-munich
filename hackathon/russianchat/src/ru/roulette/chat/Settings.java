@@ -3,6 +3,7 @@ package ru.roulette.chat;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -85,7 +86,11 @@ public class Settings extends Activity implements Callback {
 	Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
 		public void onPictureTaken(byte[] imageData, Camera c) {
 			Log.i("Settings", "onPictureTaken() called");
-			Chat.setImage(imageData);
+			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("picture", imageData);
+			intent.putExtras(bundle);
+			Settings.this.setResult(RESULT_OK, intent);
 			Settings.this.finish();
 		}
 	};
