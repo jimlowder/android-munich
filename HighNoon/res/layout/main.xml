@@ -12,16 +12,16 @@
     android:text="Start"
     />
 <Button
-	android:id="@+id/stop"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Stop"
-    />
-<Button
 	android:id="@+id/peng"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="Peng"
+    />
+<Button
+	android:id="@+id/stop"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Stop"
     />
 
 <TextView  
