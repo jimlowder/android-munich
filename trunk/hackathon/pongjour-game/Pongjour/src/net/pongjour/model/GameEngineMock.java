@@ -72,11 +72,21 @@ class GameEngineMock implements GameEngine {
         final PointF p = new PointF();
         p.x = mBallXPosition;
         p.y = 0.5f;
-        
+        boolean contact = true;
     	if(mBallXPosition >= 1.0 || mBallXPosition <= 0) {
-    		mBallNextDelta = -mBallNextDelta;
+			// if not within +/-.10 from center (ball missed lever) (currently only
+			// for right player -> 1.0)
+    		if(!(Math.abs(p.y-myRacketPosition) <= 0.10) && mBallXPosition >= 1.0) {
+    			contact = false;
+    		}
+    		
+        	// switch ball direction
+        	if(contact) {
+        		mBallNextDelta = -mBallNextDelta;
+        	}
     	}
-    	mBallXPosition += mBallNextDelta;
+    	
+    	mBallXPosition = (float) Math.min(1.0, mBallXPosition+mBallNextDelta);
         return p;
     }
 
