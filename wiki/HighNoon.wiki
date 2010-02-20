@@ -1,0 +1,9 @@
+High Noon
+
+Phasen:
+ # Start
+ # Discovery (Blue-Tooth)
+ # Melodie
+ # Synced und alle in Ruhelage => Ready
+ # 3-7s Stille
+ # Geierschrei
