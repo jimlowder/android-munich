@@ -23,4 +23,8 @@
 	    android:name="android.test.InstrumentationTestRunner"
 	    android:targetPackage="com.comsysto.android.appone"             
 	    android:label="MyAppTests" />
+<!--<permission android:name="android.permission.READ_CONTACTS"></permission>-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 
