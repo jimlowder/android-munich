@@ -17,6 +17,8 @@ class GameEngineMock implements GameEngine {
 
     private float mOppRacketPosition = 0.5f;
     private float mOppRacketNextDelta = 0.01f;
+	private float mBallXPosition = 0.5f;
+	private float mBallNextDelta = 0.01f;
 
     static class Networking {
         PointF ballPos, ballSpeed;
@@ -68,8 +70,13 @@ class GameEngineMock implements GameEngine {
     public PointF getBallPosition() {
         // @TODO Reflexion oben und unten!!!
         final PointF p = new PointF();
-        p.x = 0.5f;
+        p.x = mBallXPosition;
         p.y = 0.5f;
+        
+    	if(mBallXPosition >= 1.0 || mBallXPosition <= 0) {
+    		mBallNextDelta = -mBallNextDelta;
+    	}
+    	mBallXPosition += mBallNextDelta;
         return p;
     }
 

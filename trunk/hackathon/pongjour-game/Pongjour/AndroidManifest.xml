@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".Pongjour"
+        <activity android:name=".PlayActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -15,7 +15,7 @@
             </intent-filter>
         </activity>
 
-    <activity android:name="PlayActivity"></activity>
+    <!-- <activity android:name="PlayActivity"></activity>  -->
 </application>
     <uses-sdk android:minSdkVersion="3" />
 
