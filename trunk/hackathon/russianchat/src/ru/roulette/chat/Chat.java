@@ -188,4 +188,10 @@ public class Chat extends Activity implements Runnable {
 		
 	};
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		commHandler.logoff(this.myId);
+	}
+	
 }
