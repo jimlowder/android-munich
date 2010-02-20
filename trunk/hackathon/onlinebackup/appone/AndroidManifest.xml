@@ -15,7 +15,8 @@
                   android:label="@string/app_name">
         </activity>
 
-    </application>
+    <activity android:name=".OBListActivity"></activity>
+</application>
     <uses-sdk android:minSdkVersion="7" />
 
 </manifest> 
