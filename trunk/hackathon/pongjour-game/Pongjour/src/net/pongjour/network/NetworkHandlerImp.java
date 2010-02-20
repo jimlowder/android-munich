@@ -21,6 +21,64 @@ import android.util.Log;
 
 public class NetworkHandlerImp extends NetworkHandler {
 
+	private final class Listener implements ServiceListener {
+		@Override
+		public void serviceAdded(ServiceEvent evt) {
+			String host = evt.getDNS().getHostName();
+			Player player = getPlayerFromEvent(evt);
+			if (player != null && !_players.contains(player)) {
+				_players.add(player);
+				notifyPlayersChanged(player);
+			}
+			log("serviceAdded:" + host + "->" + player);
+		}
+
+		@Override
+		public void serviceRemoved(ServiceEvent evt) {
+			String host = evt.getDNS().getHostName();
+			Player player = getPlayerFromEvent(evt);
+			if (player != null) {
+				_players.remove(player);
+				notifyPlayersChanged(player);
+			}
+			log("serviceRemoved: " + host + "->" + player);
+		}
+
+		@Override
+		public void serviceResolved(ServiceEvent info) {
+			String host = info.getDNS().getHostName();
+			log("serviceResolved: " + host);
+		}
+
+	}
+
+	private Player getPlayerFromEvent(ServiceEvent evt) {
+		Hashtable<String, String> properties = getPropertiesFromEvent(evt);
+		Player player = Player.fromServiceInfo(properties);
+		return player;
+	}
+
+	private Hashtable<String, String> getPropertiesFromEvent(ServiceEvent evt) {
+		ServiceInfo info = evt.getInfo();
+		Hashtable<String, String> props = new Hashtable<String, String>();
+		if (info == null) {
+			info = _jmdns.getServiceInfo(PONGJOUR_ID, evt.getName());
+		}
+		if (info != null) {
+			for (Enumeration<String> iterator = info.getPropertyNames(); iterator.hasMoreElements();) {
+				String key = (String) iterator.nextElement();
+				props.put(key, info.getPropertyString(key));
+			}
+		}
+		return props;
+	}
+
+	private void notifyPlayersChanged(Player player) {
+		Map<String, Object> userInfo = new HashMap<String, Object>();
+		userInfo.put("object", player);
+		NotificationCenter.postNotification(Notifications.PLAYERS_CHANGED, NetworkHandlerImp.this, userInfo);
+	}
+	
 	public static void log(String msg) {
 		Log.i(NetworkHandler.class.getSimpleName(), msg);
 	}
@@ -33,63 +91,42 @@ public class NetworkHandlerImp extends NetworkHandler {
 
 	private List<Player> _players = new ArrayList<Player>();
 
-	public NetworkHandlerImp() {
-		ServiceListener listener = new ServiceListener() {
 
-			@Override
-			public void serviceAdded(ServiceEvent evt) {
-				String host = evt.getDNS().getHostName();
-				// _players.add(Player.fromString(info.toString()));
-				Player player = getPlayerFromEvent(evt);
-				if (!_players.contains(player)) {
-					_players.add(player);
-					notifyPlayersChanged(player);
-				}
-				log("serviceAdded:" + host + "->" + player);
-			}
+	
+	private class SimpleFetch implements Runnable {
 
-			private Player getPlayerFromEvent(ServiceEvent evt) {
-				Hashtable<String, String> properties = getPropertiesFromEvent(evt);
-				Player player = Player.fromServiceInfo(properties);
-				return player;
-			}
+		@Override
+		public void run() {
 
-			private Hashtable<String, String> getPropertiesFromEvent(ServiceEvent evt) {
-				ServiceInfo info = evt.getInfo();
-				Hashtable<String, String> props = new Hashtable<String, String>();
-				if (info == null) {
-					info = _jmdns.getServiceInfo(PONGJOUR_ID, evt.getName());
-				}
-				if (info != null) {
-					for (Enumeration<String> iterator = info.getPropertyNames(); iterator.hasMoreElements();) {
+			while(true) {
+				ServiceInfo infos[] = _jmdns.list(PONGJOUR_ID);
+				for (int i = 0; i < infos.length; i++) {
+					ServiceInfo serviceInfo = infos[i];
+					Hashtable<String, String> props = new Hashtable<String, String>();
+					for (Enumeration<String> iterator = serviceInfo.getPropertyNames(); iterator.hasMoreElements();) {
 						String key = (String) iterator.nextElement();
-						props.put(key, info.getPropertyString(key));
+						props.put(key, serviceInfo.getPropertyString(key));
 					}
+					Player player = Player.fromServiceInfo(props);
+
+					log(i+ " -> " + player);
 				}
-				return props;
+				try {
+					log("Waiting");
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					break;
+				}
 			}
+		}
+		
+	}
+	
+	public NetworkHandlerImp() {
+	}
 
-			@Override
-			public void serviceRemoved(ServiceEvent evt) {
-				String host = evt.getDNS().getHostName();
-				Player player = getPlayerFromEvent(evt);
-				_players.remove(player);
-				notifyPlayersChanged(player);
-				log("serviceRemoved: " + host + "->" + player);
-			}
-
-			private void notifyPlayersChanged(Player player) {
-				Map<String, Object> userInfo = new HashMap<String, Object>();
-				userInfo.put("object", player);
-				NotificationCenter.postNotification(Notifications.PLAYERS_CHANGED, NetworkHandlerImp.this, userInfo);
-			}
-
-			@Override
-			public void serviceResolved(ServiceEvent info) {
-				String host = info.getDNS().getHostName();
-				log("serviceResolved: " + host);
-			}
-		};
+	public void startListening() {
+		ServiceListener listener = new Listener();
 
 		try {
 			Player player = Player.self();
@@ -98,7 +135,8 @@ public class NetworkHandlerImp extends NetworkHandler {
 			ServiceInfo info = ServiceInfo.create(PONGJOUR_ID, player.getName(), 1268, 0, 0, player.getServiceInfo());
 			_jmdns.registerService(info);
 			_jmdns.addServiceListener(PONGJOUR_ID, listener);
-			ServiceInfo si = _jmdns.getServiceInfo(PONGJOUR_ID, name);
+			new Thread(new SimpleFetch()).start();
+			//ServiceInfo si = _jmdns.getServiceInfo(PONGJOUR_ID, name);
 			// log(si.getTextString());
 		} catch (IOException e) {
 			throw new RuntimeException("Can't register", e);

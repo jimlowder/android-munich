@@ -24,4 +24,6 @@ public abstract class NetworkHandler {
 	 * @return
 	 */
 	public abstract boolean invite(String host);
+	
+	public abstract void startListening();
 }

@@ -52,10 +52,13 @@ public class Player {
 	}
 	
 	public static Player fromServiceInfo(Hashtable<String, String> props) {
-		Player player = new Player(props.get("name"), props.get("host"));
-		player.port = Integer.valueOf(props.get("port"));
-		player.score = Integer.valueOf(props.get("score"));
-		return player;
+		if (props.size() > 0) {
+			Player player = new Player(props.get("name"), props.get("host"));
+			player.port = Integer.valueOf(props.get("port"));
+			player.score = Integer.valueOf(props.get("score"));
+			return player;
+		}
+		return null;
 	}
 	
 	public static void register(String name) {
