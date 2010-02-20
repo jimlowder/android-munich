@@ -145,9 +145,18 @@ public class Chat extends Activity implements Runnable {
     		// login
     		Log.i(TAG,"starting login....");
     		this.myId = commHandler.login(ownImage);
-    		Log.i(TAG,"Logged in with id="+this.myId);
-    		Thread thread = new Thread(this);
-    		thread.start();
+    		if (this.myId == 0) {
+    			Log.w(TAG,"Login failed...");
+    			Toast.makeText(Chat.this,
+    					"Sorry - Login failed. Please try again later...",
+    					Toast.LENGTH_LONG).show();
+    			return;
+    			
+    		} else {
+	    		Log.i(TAG,"Logged in with id="+this.myId);
+	    		Thread thread = new Thread(this);
+	    		thread.start();
+    		}
     	}
 		// get next chat contact from server
     	this.destId = commHandler.nextIdentity();
