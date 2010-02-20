@@ -1,27 +1,34 @@
 package ru.roulette.chat;
 
-
 import ru.roulette.comm.CommHandler;
 import ru.roulette.comm.Identity;
+import ru.roulette.comm.mock.CommHandlerMock;
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
-public class Chat extends Activity {
+public class Chat extends Activity implements Runnable {
 	
 	final private static String TAG="Chat";
 	
 	private static Button sendButton;
 	private static Button nextButton;
-	
+	private static ImageView userImage;
 	private static EditText msgInput;
 	private static EditText msgOutput;
 	
 	private int myId = 0;
 	private Identity destId = null;
 	private byte[] image;
+	
+	private String message;
 	
 	CommHandler commHandler;
 	
@@ -49,12 +56,16 @@ public class Chat extends Activity {
         msgInput = (EditText) findViewById(R.id.msgInput);
         msgInput.requestFocus();
         msgOutput = (EditText) findViewById(R.id.msgOutput);
+        userImage = (ImageView) findViewById(R.id.picture);
+		userImage.setImageDrawable(getResources().getDrawable( R.drawable.defaultuserimage));
+        commHandler = new CommHandlerMock();
     }
     
     private void sendMsgInput() {
     	if (msgInput.getText() != null && this.destId != null) {
     		String message = msgInput.getText().toString();
     		commHandler.message(this.myId, this.destId.getId(), message);
+    		msgInput.setText(""); //clear input
     		msgInput.requestFocus();
     	}
     }
@@ -63,11 +74,43 @@ public class Chat extends Activity {
     	if (this.myId == 0) {
     		// login
     		this.myId = commHandler.login(this.image);
+    		Thread thread = new Thread(this);
+    		thread.start();
     	}
 		// get next chat contact from server
     	this.destId = commHandler.nextIdentity();
-
+    	if (this.destId != null && this.destId.getImage() != null && this.destId.getImage().length > 0) {
+			userImage.setImageBitmap(BitmapFactory.decodeByteArray(this.destId.getImage(), 0, this.destId.getImage().length));
+		}
     	// TODO ? no next id found
     	// TODO ? old id == new id
     }
+    
+	@Override
+	public void run() {
+		while (true) {
+			if (this.destId != null) {
+				this.message = commHandler.getMyMessages(this.myId);
+				handler.sendEmptyMessage(0);				
+				try {
+					 Thread.sleep(800);
+				} catch (InterruptedException e) {
+					Log.e(TAG,"Polling sleep error"+e);
+				}
+			}
+		}
+	}
+    
+	private Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+
+			if(Chat.this.message != null) {
+				msgOutput.setText(Chat.this.message);
+			} 
+		}
+
+	};
+    
 }
