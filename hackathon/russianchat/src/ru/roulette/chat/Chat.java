@@ -49,14 +49,14 @@ public class Chat extends Activity implements Runnable {
         
         sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
-			@Override
+		
 			public void onClick(View v) {
 				sendMsgInput();
 			}
 		});
         nextButton = (Button) findViewById(R.id.nextButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
-			@Override
+			
 			public void onClick(View v) {
 				nextChatContact();
 			}
@@ -167,7 +167,7 @@ public class Chat extends Activity implements Runnable {
     	// TODO ? old id == new id
     }
     
-	@Override
+
 	public void run() {
 		while (true) {
 			if (this.myId != 0) {

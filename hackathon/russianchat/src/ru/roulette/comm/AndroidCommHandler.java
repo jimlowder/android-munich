@@ -10,7 +10,7 @@ public class AndroidCommHandler implements CommHandler {
 		this.serviceHandler = new HttpServiceHandler();
 	}
 
-	@Override
+
 	public String getMyMessages(int myid) {
 		String s = this.serviceHandler.getString(myid,
 				HttpServiceHandler.SERVERNAME + "poll");
@@ -22,7 +22,7 @@ public class AndroidCommHandler implements CommHandler {
 		return s;
 	}
 
-	@Override
+
 	public int login(byte[] image) {
 		int id = this.serviceHandler.postData(image,
 				HttpServiceHandler.SERVERNAME + "logon");
@@ -30,14 +30,13 @@ public class AndroidCommHandler implements CommHandler {
 		return id;
 	}
 
-	@Override
 	public void message(int myid, int destid, String message) {
 		serviceHandler.sendMessage(myid, destid, message,
 				HttpServiceHandler.SERVERNAME + "message");
 		Log.d("message", "send message " + message);
 	}
 
-	@Override
+
 	public Identity nextIdentity() {
 		Identity identity = serviceHandler.nextIdentity(HttpServiceHandler.SERVERNAME + "next");
 		int id = identity.getId();
@@ -46,7 +45,7 @@ public class AndroidCommHandler implements CommHandler {
 		return identity;
 	}
 
-	@Override
+	
 	public void logoff(int myid) {
 		serviceHandler.sendID(myid,HttpServiceHandler.SERVERNAME + "logoff");
 

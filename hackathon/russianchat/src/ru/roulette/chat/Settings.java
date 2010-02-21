@@ -42,8 +42,7 @@ public class Settings extends Activity implements Callback {
 		
 		takePicture = (Button) findViewById(R.id.takePicture);
 		takePicture.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
+
 			public void onClick(View v) {
 				camera.takePicture(shutterCallback, rawCallback, pictureCallback);
 				
@@ -51,7 +50,6 @@ public class Settings extends Activity implements Callback {
 		});
 	}
 
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		if (previewRunning) {
@@ -70,13 +68,13 @@ public class Settings extends Activity implements Callback {
 		previewRunning = true;
 	}
 
-	@Override
+
 	public void surfaceCreated(SurfaceHolder holder) {
 		camera = Camera.open();
 
 	}
 
-	@Override
+
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		camera.stopPreview();
 		previewRunning = false;
