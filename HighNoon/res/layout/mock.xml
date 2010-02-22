@@ -27,7 +27,7 @@
 		android:id="@+id/bang"
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:text="Peng"
+	    android:text="Shoot!!!"
 	    />
 	<Button
 		android:id="@+id/quit"
@@ -43,22 +43,28 @@
 	    android:layout_height="wrap_content"
 	    >
 	<Button
-		android:id="@+id/gunDown"
+		android:id="@+id/remoteGunDown"
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:text="GunDown"
+	    android:text="R_GunDown"
 	    />
 	<Button
-		android:id="@+id/gunUp"
+		android:id="@+id/remoteGunUp"
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:text="GunUp"
+	    android:text="R_GunUp"
 	    />
 	<Button
-		android:id="@+id/gunIntermediate"
+		android:id="@+id/remoteGunIntermediate"
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:text="rumfuchteln"
+	    android:text="R_GunMove"
+	    />
+	<Button
+		android:id="@+id/remoteBang"
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:text="R_Bang"
 	    />
 	</LinearLayout>
 <TextView

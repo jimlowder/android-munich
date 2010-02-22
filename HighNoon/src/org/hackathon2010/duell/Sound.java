@@ -17,6 +17,9 @@ public class Sound {
 	}
 
 	public void start(final boolean forEver) {
+		if (isPlaying())
+			return;
+		
 		mediaPlayer = MediaPlayer.create(activity, resourceId);
 		
         mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
@@ -38,7 +41,7 @@ public class Sound {
 			}
         });
         
-        Log.i("Verification", "player starting... " + String.format("0x%x", resourceId));
+        Log.i("HiNo", "player starting... " + String.format("0x%x", resourceId));
         mediaPlayer.start();
 	}
 
@@ -48,5 +51,9 @@ public class Sound {
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
+	}
+	
+	public boolean isPlaying() {
+		return mediaPlayer != null;
 	}
 }

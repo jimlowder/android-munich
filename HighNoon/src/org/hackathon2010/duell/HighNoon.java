@@ -1,153 +1,216 @@
 package org.hackathon2010.duell;
 
-import it.gerdavax.android.bluetooth.BluetoothException;
-import it.gerdavax.android.bluetooth.LocalBluetoothDevice;
-import it.gerdavax.android.bluetooth.LocalBluetoothDeviceListener;
-import it.gerdavax.android.bluetooth.RemoteBluetoothDevice;
-import it.gerdavax.android.bluetooth.RemoteBluetoothDeviceListener;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class HighNoon extends Activity {
 
+	public static final String TAG = "HiNo";
+	private static boolean mock = true;
+	
 	private SensorManager sensorManager;
-	private Sensor accelerometer;
-	private TextView anzeige;
-	private Sound intro;
-	private Sound background;
-	private Sound flute;
-	private Sound howl;
-	private Sound vulture;
-	private Sound bang;
-	private LocalBluetoothDevice localBT;
+	private Sensor orientationSensor;
+	protected Sound intro;
+	protected Sound flute;
+	protected Sound howl;
+	protected Sound bang;
+	protected Sound background;
+	private Controller controller;
 
-	/** Called when the activity is first created. */
+	protected Handler handler = new Handler() { 
+	    @Override 
+	    public void handleMessage(Message msg) {
+	    	howl.start(false);
+	    } 
+	};
+	  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-
-		anzeige = (TextView) findViewById(R.id.anzeige);
-		intro = new Sound(HighNoon.this, R.raw.intro);
-		background = new Sound(HighNoon.this, R.raw.background);
-		flute = new Sound(HighNoon.this, R.raw.flute);
-		howl = new Sound(HighNoon.this, R.raw.howl);
-		bang = new Sound(HighNoon.this, R.raw.bang);
-		anzeige.append("now: " + new Date() + "\n");
+		if (mock)
+			setContentView(R.layout.mock);
+		else
+			setContentView(R.layout.main);
 		
-		try {			
-			localBT = LocalBluetoothDevice.initLocalDevice(this);
-			localBT.setListener(new LocalBluetoothDeviceListener() {
-				
-				public void scanStarted() {
-//					Toast.makeText(HighNoon.this, "Scan started", Toast.LENGTH_LONG).show();
-				}
-				
-				public void scanCompleted(ArrayList<String> addrs) {
-					display("Scan completed");
-					
-					for (String addr : addrs) {
-						RemoteBluetoothDevice remoteDevice = localBT.getRemoteBluetoothDevice(addr);
-						remoteDevice.setListener(new RemoteListener(remoteDevice, HighNoon.this));
-						remoteDevice.pair("0000");							
-					}
-
-					display("Paring started");
-				}
-				
-				public void deviceFound(String deviceAddr) {
-				}
-				
-				public void bluetoothEnabled() {
-//					Toast.makeText(HighNoon.this, "Enabled", Toast.LENGTH_SHORT).show();					
-				}
-				
-				public void bluetoothDisabled() {
-//					Toast.makeText(HighNoon.this, "Disabled", Toast.LENGTH_SHORT).show();
-				}
-			});
-			localBT.setEnabled(true);
-			localBT.scan();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		controller = new Controller(this);
+		try {
+			controller.setTransmitter(createTransmitter());
+		} catch (Exception e) {
+			finish();
+			return;
 		}
+
+		initSounds();
+		initUI();
+		if (mock) initMockUI();
 		
-	    
-		Button startBtn = (Button) findViewById(R.id.start);
-		startBtn.setOnClickListener(new View.OnClickListener() {
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		sensorManager.registerListener(new OrientationListener(controller), orientationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+		Log.d(TAG, "...done onCreate");
+	}
+
+	private Transmitter createTransmitter() throws Exception {
+		if (mock)
+			return new Transmitter() {
+				public void localGunUp() {}
+				public void localGunShot() {}
+				public void localGunIntermediate() {}
+				public void localGunDown() {}
+				public void connect() throws Exception {}
+				public void close() {}
+			};
+		else
+			return new LocalListener(controller);		
+	}
+	
+	private void initUI() {
+		Button restartBtn = (Button) findViewById(R.id.restart);
+		restartBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				background.start(true);
+				// TODO
 			}
 		});
 
-		Button stopBtn = (Button) findViewById(R.id.stop);
-		stopBtn.setOnClickListener(new View.OnClickListener() {
+		Button quitBtn = (Button) findViewById(R.id.quit);
+		quitBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				stopOrDestroy();
-				background.stop();
+				shutdownTransmitter();
+				intro.stop();
 				HighNoon.this.finish();
 			}
 		});
 
-		Button pengBtn = (Button) findViewById(R.id.peng);
-		pengBtn.setOnClickListener(new View.OnClickListener() {
+		Button bangBtn = (Button) findViewById(R.id.bang);
+		bangBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				bang.start(false);
+				controller.localGunShot();
+			}
+		});
+	}
+	
+	private void initMockUI() {
+		Button remoteGunDownBtn = (Button) findViewById(R.id.remoteGunDown);
+		remoteGunDownBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				controller.remoteGunDown();
 			}
 		});
 
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		// accelerometer =
-		// sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		Button remoteGunUpBtn = (Button) findViewById(R.id.remoteGunUp);
+		remoteGunUpBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				controller.remoteGunUp();
+			}
+		});
 
-		List<Sensor> allSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-		for (Sensor s : allSensors) {
-			String sensorName = s.getName();
-			anzeige.append(sensorName + "\n");
-		}
-		anzeige.append("--- das waren die Sensoren ---");
+		Button remoteGunIntermediateBtn = (Button) findViewById(R.id.remoteGunIntermediate);
+		remoteGunIntermediateBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				controller.remoteGunIntermediate();
+			}
+		});
 
+		Button remoteBangBtn = (Button) findViewById(R.id.remoteBang);
+		remoteBangBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				bang.start(false);
+				controller.remoteGunShot();
+			}
+		});
+	}
+
+
+	private void initSounds() {
+		intro = new Sound(this, R.raw.intro);
+		flute = new Sound(this, R.raw.flute);
+		howl = new Sound(this, R.raw.howl);
+		bang = new Sound(this, R.raw.bang);
+		background = new Sound(this, R.raw.background);
+	}
+
+	
+	@Override
+	protected void onPause() {
+		intro.stop();
+		flute.stop();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.w(TAG, "onResume");
+		intro.start(true);
 		try {
-			localBT = LocalBluetoothDevice.initLocalDevice(this);
+			controller.connect();
 		} catch (Exception e) {
-			anzeige.append(e.toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d(TAG, "Exception in localBT: " + e);
 		}
+		
+		super.onResume();
+	}
+
+	@Override
+	protected void onRestart() {
+		Log.w(TAG, "onRestart");
+		super.onRestart();
+		Log.d(TAG, "...done onRestart");
+	}
+
+
+	@Override
+	protected void onStart() {
+		Log.w(TAG, "onStart");
+		super.onStart();
+		Log.d(TAG, "...done onStart");
 	}
 
 	@Override
 	protected void onStop() {
-		stopOrDestroy();
+		Log.w(TAG, "onStop");
+		shutdownTransmitter();
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		stopOrDestroy();
+		Log.w(TAG, "onDestroy");
+		shutdownTransmitter();
 		super.onDestroy();
 	}
 
-	private void stopOrDestroy() {
-		if (localBT != null) {
-			localBT.close();
+	private void shutdownTransmitter() {
+		if (controller != null) {
+			controller.close();
+			controller = null;
 		}
 	}
 	
-	public void display(String s) {
-		anzeige.append("\n");
-		anzeige.append(s);
-	}
+//	public void Log.d(TAG, final String s) {
+//		runOnUiThread(new Runnable() {
+//			public void run() {
+//				long t = System.currentTimeMillis() - creationTime;
+//				anzeige.append("\n" + t + ": ");
+//				anzeige.append(s);
+//			}
+//		});
+//	}
+//
+//
+//	public void showOrientation(final String s) {
+//		runOnUiThread(new Runnable() {
+//			public void run() {
+//				singleLine.setText(s);
+//			}
+//		});
+//	}	
 }
