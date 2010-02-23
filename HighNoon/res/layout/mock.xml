@@ -3,19 +3,18 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<TextView
-	android:id="@+id/singleLine"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content"
-    android:singleLine="true"
-    />
-
+    android:gravity="bottom|center_horizontal" android:layout_gravity="center">
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:orientation="horizontal"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    >
+	<Button
+		android:id="@+id/quit"
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:text="Quit"
+	    />
 	<Button
 		android:id="@+id/restart"
 	    android:layout_width="wrap_content" 
@@ -25,46 +24,44 @@
 	    />
 	<Button
 		android:id="@+id/bang"
-	    android:layout_width="wrap_content" 
+	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
 	    android:text="Shoot!!!"
-	    />
-	<Button
-		android:id="@+id/quit"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Quit"
 	    />
 	</LinearLayout>
 	
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
+	    android:layout_width="160px"
 	    android:layout_height="wrap_content"
-	    >
+	    android:gravity="bottom|center_horizontal" android:layout_gravity="center" android:layout_marginTop="100px" android:orientation="vertical" android:background="#FFFF8080">
+	<TextView
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+	    android:text="Simulate Remote" android:textSize="20dip"/>
+		
+	<Button
+		android:id="@+id/remoteGunIntermediate"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="Gun Anywhere"
+	    />
 	<Button
 		android:id="@+id/remoteGunDown"
-	    android:layout_width="wrap_content" 
+	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="R_GunDown"
+	    android:text="Gun Down"
 	    />
 	<Button
 		android:id="@+id/remoteGunUp"
-	    android:layout_width="wrap_content" 
+	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="R_GunUp"
-	    />
-	<Button
-		android:id="@+id/remoteGunIntermediate"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="R_GunMove"
+	    android:text="Gun Up"
 	    />
 	<Button
 		android:id="@+id/remoteBang"
-	    android:layout_width="wrap_content" 
+	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="R_Bang"
+	    android:text="Bang"
 	    />
 	</LinearLayout>
 <TextView
