@@ -1,5 +1,8 @@
 package org.hackathon2010.duell;
 
+import android.util.Log;
+import android.widget.Toast;
+
 public class Controller {
 	private static enum STATE {SYNC, READY, STEADY, GO, SHOT1, SHOT2}
 
@@ -10,12 +13,18 @@ public class Controller {
 	private boolean localGunShot;
 	private boolean remoteGunShot;
 	private boolean shootingAlowed;
-	private STATE state = STATE.SYNC;
+	private STATE state;
 	
 	public Controller(HighNoon activity) {
 		this.activity = activity;
+		reset();
 	}
 
+	public void reset() {
+		state = STATE.SYNC;
+		activity.shutUp();
+	}
+	
 	public void setTransmitter(Transmitter transmitter) {
 		this.transmitter = transmitter;
 	}
@@ -51,11 +60,6 @@ public class Controller {
 		setRemoteGunDirection(GunDirection.INTERMEDIATE);
 	}
 
-	public void cry() {
-		state = STATE.GO;
-		handleState();
-	}
-	
 	public void localGunShot()  {
 		transmitter.localGunShot();
 		localGunShot = true;
@@ -95,18 +99,26 @@ public class Controller {
 			break;
 		case READY:
 			if (localGun == GunDirection.DOWN && remoteGun == GunDirection.DOWN) {
+				long delayTilCry = 3000L;
 				state = STATE.STEADY;
 				activity.flute.stop();
 				activity.intro.stop();
 				activity.background.start(true);
+				
+				activity.handler.postDelayed(
+					new Runnable() {
+						public void run() {
+							state = STATE.GO;
+							activity.howl.start(false);
+							activity.background.stop();
+						}
+					}, delayTilCry);
 			}
 			break;
 		case STEADY:
-			activity.handler.sendMessageDelayed(activity.handler.obtainMessage(), 3000L);
+			// TODO: what should we do if players shrug during STEADY?
 			break;
 		case GO:
-			activity.background.stop();
-			activity.howl.start(false);
 			break;
 		case SHOT1:
 		case SHOT2:

@@ -7,7 +7,7 @@ import it.gerdavax.android.bluetooth.RemoteBluetoothDeviceListener;
 
 public class RemoteListener implements RemoteBluetoothDeviceListener {
 	private RemoteBluetoothDevice remoteDevice;
-	 private Controller controller;
+	private Controller controller;
 	
 	public RemoteListener(RemoteBluetoothDevice remoteDevice, Controller controller) {
 		this.remoteDevice = remoteDevice;

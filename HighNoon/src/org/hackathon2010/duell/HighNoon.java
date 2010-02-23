@@ -23,22 +23,22 @@ public class HighNoon extends Activity {
 	protected Sound bang;
 	protected Sound background;
 	private Controller controller;
-
-	protected Handler handler = new Handler() { 
-	    @Override 
-	    public void handleMessage(Message msg) {
-	    	howl.start(false);
-	    } 
-	};
+	protected Handler handler = new Handler();
 	  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.w(TAG, "onCreate");
+		
 		super.onCreate(savedInstanceState);
 		if (mock)
 			setContentView(R.layout.mock);
 		else
 			setContentView(R.layout.main);
 		
+		initSounds();
+		initUI();
+		if (mock) initMockUI();
+
 		controller = new Controller(this);
 		try {
 			controller.setTransmitter(createTransmitter());
@@ -47,9 +47,7 @@ public class HighNoon extends Activity {
 			return;
 		}
 
-		initSounds();
-		initUI();
-		if (mock) initMockUI();
+		controller.reset();
 		
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
@@ -178,6 +176,7 @@ public class HighNoon extends Activity {
 	protected void onStop() {
 		Log.w(TAG, "onStop");
 		shutdownTransmitter();
+		shutUp();
 		super.onStop();
 	}
 
@@ -185,6 +184,7 @@ public class HighNoon extends Activity {
 	protected void onDestroy() {
 		Log.w(TAG, "onDestroy");
 		shutdownTransmitter();
+		shutUp();
 		super.onDestroy();
 	}
 
@@ -193,6 +193,14 @@ public class HighNoon extends Activity {
 			controller.close();
 			controller = null;
 		}
+	}
+
+	public void shutUp() {
+		intro.stop();
+		flute.stop();
+		howl.stop();
+		bang.stop();
+		background.stop();
 	}
 	
 //	public void Log.d(TAG, final String s) {
