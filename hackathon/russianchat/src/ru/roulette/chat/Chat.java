@@ -67,7 +67,17 @@ public class Chat extends Activity implements Runnable {
         userImage = (ImageView) findViewById(R.id.picture);
 		userImage.setImageDrawable(getResources().getDrawable( R.drawable.defaultuserimage));
         commHandler = new AndroidCommHandler();
+        
+        updateNextButton();
     }
+
+	private void updateNextButton() {
+		if (this.destId == null) {
+        	nextButton.setText("Login");
+        } else {
+        	nextButton.setText("Next");
+        }
+	}
     
     /**
 	 * Create the options menu for this activity {@inheritDoc}
@@ -127,9 +137,10 @@ public class Chat extends Activity implements Runnable {
     private void sendMsgInput() {
     	if (this.destId == null) {
     		Toast.makeText(Chat.this,
-					"Please click 'Next' first to log in.",
+					"Please click 'Login' first to log in.",
 					Toast.LENGTH_LONG).show();
     	}
+    	updateNextButton();
     	if (msgInput.getText() != null && this.destId != null) {
     		String message = msgInput.getText().toString();
     		Log.i(TAG,"sending message="+message+" to id="+this.destId.getId());
@@ -154,6 +165,7 @@ public class Chat extends Activity implements Runnable {
     			
     		} else {
 	    		Log.i(TAG,"Logged in with id="+this.myId);
+	    		updateNextButton();
 	    		Thread thread = new Thread(this);
 	    		thread.start();
     		}

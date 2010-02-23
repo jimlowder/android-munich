@@ -1,0 +1,21 @@
+README:
+
+russianchat uses
+
+redis as a key value store for data:
+
+build it:
+git clone git://github.com/antirez/redis.git
+make
+
+run it:
+./redis-server
+
+and node.js as a http server:
+
+built it:
+git clone git://github.com/ry/node.git
+./configure && make && sudo make install
+
+run the server:
+node server.js
