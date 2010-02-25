@@ -24,7 +24,7 @@ public class AndroidCommHandler implements CommHandler {
 
 
 	public int login(byte[] image) {
-		int id = this.serviceHandler.postData(image,
+		int id = this.serviceHandler.login(image,
 				HttpServiceHandler.SERVERNAME + "logon");
 		Log.d("login", "My id : " + id);
 		return id;

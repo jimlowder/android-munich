@@ -1,7 +1,6 @@
 package ru.roulette.comm;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +19,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -32,7 +31,9 @@ import android.util.Log;
 
 public class HttpServiceHandler {
 
-	public final static String SERVERNAME = "http://192.168.182.11:8000/";
+	final static String SERVERNAME = "http://192.168.182.11:8000/";
+	
+	private final static String TAG = "HttpTransport";
 
 	private HttpClient httpClient;
 
@@ -40,7 +41,7 @@ public class HttpServiceHandler {
 		// sets up parameters
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setContentCharset(params, "utf-8");
+		HttpProtocolParams.setContentCharset(params, "UTF-8");
 		// params.setBooleanParameter("http.protocol.expect-continue", false);
 		// Set the timeout in milliseconds until a connection is established.
 		int timeoutConnection = 3000;
@@ -65,11 +66,14 @@ public class HttpServiceHandler {
 		this.httpClient = new DefaultHttpClient(manager, params);
 	}
 
-	public int postData(byte[] image, String url) {
+	public int login(byte[] image, String url) {
 		HttpPost httpPostRequest = new HttpPost(url);
-		if (image != null)
-			httpPostRequest.setEntity(new ByteArrayEntity(image));
 		try {
+			if (image != null) {
+				StringBuilder imageBase64 = new StringBuilder();
+				imageBase64.append(Base64Coder.encode(image));
+				httpPostRequest.setEntity(new StringEntity(imageBase64.toString()));
+			}
 			HttpResponse response = httpClient.execute(httpPostRequest);
 
 			String s = getStringFromEntity(response.getEntity());
@@ -79,7 +83,7 @@ public class HttpServiceHandler {
 			}
 			return Integer.parseInt(s);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log.e(TAG,"Error ");
 		}
 
 		return 0;
@@ -96,40 +100,17 @@ public class HttpServiceHandler {
 				sb.append(cur);
 			}
 		} catch (IOException e) {
-			Log.e("http", "Error while reading inputstream: " + e);
+			Log.e(TAG, "Error while reading inputstream: " + e);
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					Log.e("http", "Error while closing reader: " + e);
+					Log.e(TAG, "Error while closing reader: " + e);
 				}
 			}
 		}
 		return sb.toString();
-	}
-	
-	private static byte[] getBytesFromEntity(HttpEntity entity) {
-		InputStreamReader reader = null;
-		try {
-			InputStream content = entity.getContent();
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			bos.write(content.read());
-			byte[] ba = bos.toByteArray();
-			return ba;
-			
-		} catch (IOException e) {
-			Log.e("http", "Error while reading inputstream: " + e);
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					Log.e("http", "Error while closing reader: " + e);
-				}
-			}
-		}
-		return null;
 	}
 	
 	public Identity nextIdentity(String url) {
@@ -148,11 +129,11 @@ public class HttpServiceHandler {
 			ident.setId(id);
 			ident.setImage(null);
 
-			Log.d("getImage", "My chat partner: " + id);
+			Log.d(TAG, "got chat partner id=" + id);
 
 			return ident;
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler"," getImage"+ex);
+			Log.e(TAG, "getImage exception: "+ex);
 		} finally {
 			if (is != null) {
 				try {
@@ -169,11 +150,12 @@ public class HttpServiceHandler {
 		HttpGet httpGet = new HttpGet(url+ "?myID=" + myid);
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
-			byte[] bytes = getBytesFromEntity(response.getEntity());
-			Log.d("getImage", "got image");
+			String base64image = getStringFromEntity(response.getEntity());
+			byte[] bytes = Base64Coder.decode(base64image);
+			Log.d(TAG, "got an image from the server...");
 			return bytes;
 		} catch (Exception ex) {
-			Log.e("HttpServerHandler"," getImage"+ex);
+			Log.e(TAG," getImage"+ex);
 		} 
 		return null;
 
@@ -182,7 +164,7 @@ public class HttpServiceHandler {
 	public void sendMessage(int myid, int toid, String message, String url) {
 		
 		message = URLEncoder.encode(message);
-		Log.d("begin sendMessage", "---> " + myid + " " + toid + " -- "
+		Log.d(TAG,"begin sendMessage ---> " + myid + " " + toid + " -- "
 				+ message);
 
 		HttpGet httpGetRequest = new HttpGet(url + "?fromID=" + myid
@@ -191,13 +173,13 @@ public class HttpServiceHandler {
 			HttpResponse response = httpClient.execute(httpGetRequest);
 			
 			 if (response.getStatusLine().getStatusCode() != 200) {
-				 Log.d("sendMessage", response.getStatusLine().getReasonPhrase());
+				 Log.d(TAG,"sendMessage " + response.getStatusLine().getReasonPhrase());
 			 }
 		
 		} catch (Exception ex) {
-			Log.e("sendMessage","sendMessage Error e="+ex);
+			Log.e(TAG,"sendMessage Error e="+ex);
 		}
-		Log.d("sendMessage", "---> " + myid + " " + toid + " -- " + message);
+		Log.d(TAG, "sendMessage ---> " + myid + " " + toid + " -- " + message);
 	}
 
 	public String getString(int myid, String url) {
@@ -212,11 +194,11 @@ public class HttpServiceHandler {
 			return URLDecoder.decode(s);
 
 		} catch (ClientProtocolException ex) {
-			return null;
+			Log.e(TAG, "getString Error e="+ex);
 		} catch (ProtocolException ex) {
-			return null;
+			Log.e(TAG, "getString Error e="+ex);
 		} catch (Exception ex) {
-			Log.e("sendMessage","getString Error e="+ex);
+			Log.e(TAG, "getString Error e="+ex);
 		}
 
 		return null;
@@ -228,9 +210,9 @@ public class HttpServiceHandler {
 			HttpResponse response = httpClient.execute(httpGet);
 			response.getEntity();
 		} catch (ClientProtocolException e) {
-			Log.e("sendMessage","sendID Error e="+e);
+			Log.e(TAG, "sendMessage sendID Error e="+e);
 		} catch (IOException e) {
-			Log.e("sendMessage","sendID Error e="+e);
+			Log.e(TAG, "sendMessage sendID Error e="+e);
 		}
 
 	}
