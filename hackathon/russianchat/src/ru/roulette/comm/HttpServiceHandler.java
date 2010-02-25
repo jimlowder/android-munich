@@ -32,7 +32,7 @@ import android.util.Log;
 
 public class HttpServiceHandler {
 
-	public final static String SERVERNAME = "http://192.68.211.109:8000/";
+	public final static String SERVERNAME = "http://192.168.182.11:8000/";
 
 	private HttpClient httpClient;
 
@@ -165,8 +165,8 @@ public class HttpServiceHandler {
 		return null;
 	}
 	
-	public byte[] getImage(String url) {
-		HttpGet httpGet = new HttpGet(url);
+	public byte[] getImage(int myid,String url) {
+		HttpGet httpGet = new HttpGet(url+ "?myID=" + myid);
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			byte[] bytes = getBytesFromEntity(response.getEntity());

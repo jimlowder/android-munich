@@ -40,7 +40,7 @@ public class AndroidCommHandler implements CommHandler {
 	public Identity nextIdentity() {
 		Identity identity = serviceHandler.nextIdentity(HttpServiceHandler.SERVERNAME + "next");
 		int id = identity.getId();
-		byte[] image = serviceHandler.getImage(HttpServiceHandler.SERVERNAME + "image/"+id);
+		byte[] image = serviceHandler.getImage(id,HttpServiceHandler.SERVERNAME + "image");
 		identity.setImage(image);
 		return identity;
 	}

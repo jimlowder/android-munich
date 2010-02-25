@@ -45,6 +45,11 @@ public class Chat extends Activity implements Runnable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+        
+    public void onStart(){
+    	super.onStart();
+    
         setContentView(R.layout.chat);
         
         sendButton = (Button) findViewById(R.id.sendButton);
@@ -218,8 +223,8 @@ public class Chat extends Activity implements Runnable {
 	};
 	
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onStop() {
+		super.onStop();
 		commHandler.logoff(this.myId);
 		this.myId = 0;
 	}
