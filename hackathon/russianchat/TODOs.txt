@@ -1,0 +1,24 @@
+* Client anpassen (sollten Workthreads für communication machen) dann freezt das UI nicht immer.
+gute idee, evt.  paar queues für eingehende und eine für  ausgehende nachrichten ?
+
+
+* Bild als String? Also base64encoded byte[] - ja am besten am client denke ich mal reiche es dann einfach weiter 
+
+* Chat Timeout ist klar können wir machen (mit Warnung...etc.)
+
+* Logout ist bis jetzt beim Beenden... evt auch onPause...etc.
+
+* Mhh die Geschichte mit TCP vs HTTP können wir dann danach angehen - einfach erstmal extra Implementierung für TCP!?
+denke auch neben her machen und gleihcen code hernehmen, dann comm austauschen
+
+* Ich würde noch eine Nachricht schicken, wenn gerade keine freien Chatter da sind (und wieviele total im System sind)
+
+* Refactor + fix communication layer...
+
+* deploy server
+
+* Use IMEI instead of generating ids!
+
+* Get location of phone for better pairing chat partners ;)
+
+* ...etc...

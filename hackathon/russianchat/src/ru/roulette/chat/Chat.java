@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,8 +71,13 @@ public class Chat extends Activity implements Runnable {
         msgInput.requestFocus();
         msgOutput = (EditText) findViewById(R.id.msgOutput);
         userImage = (ImageView) findViewById(R.id.picture);
-		userImage.setImageDrawable(getResources().getDrawable( R.drawable.defaultuserimage));
+        //set a default offline user image...
+		userImage.setImageDrawable(getResources().getDrawable( R.drawable.offlineuser));
         commHandler = new AndroidCommHandler();
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE); 
+        String imei = telephonyManager.getDeviceId();
+        Log.i(TAG,"IMEI = "+imei);
+        //TODO use IMEI = ID ;)
         
         updateNextButton();
     }
@@ -112,6 +118,9 @@ public class Chat extends Activity implements Runnable {
 			break;
 		case R.id.menuLogout:
 			commHandler.logoff(this.myId);
+			//set offline user image
+			userImage.setImageDrawable(getResources().getDrawable( R.drawable.offlineuser));
+			this.destId = null;
 			this.myId = 0;
 			break;
 		default:
@@ -171,6 +180,10 @@ public class Chat extends Activity implements Runnable {
     		} else {
 	    		Log.i(TAG,"Logged in with id="+this.myId);
 	    		updateNextButton();
+	    		//set default online image if no ownImage was provided...
+	    		if(ownImage == null) {
+	    			userImage.setImageDrawable(getResources().getDrawable( R.drawable.onlineuser));
+	    		}
 	    		Thread thread = new Thread(this);
 	    		thread.start();
     		}
@@ -227,6 +240,8 @@ public class Chat extends Activity implements Runnable {
 		super.onStop();
 		commHandler.logoff(this.myId);
 		this.myId = 0;
+		this.destId = null;
+		updateNextButton();
 	}
 	
 }
