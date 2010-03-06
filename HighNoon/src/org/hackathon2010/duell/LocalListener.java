@@ -46,7 +46,7 @@ public class LocalListener implements LocalBluetoothDeviceListener, Transmitter 
 					Log.e(HighNoon.TAG, "ERR-Connect: " + e);
 				}
 			} else {
-				remoteDevice.setListener(new RemoteListener(remoteDevice, controller));
+				remoteDevice.setListener(new RemoteListener(remoteDevice));
 				remoteDevice.pair("0000");
 				Log.e(HighNoon.TAG, "Paring initiated for: " + addr);
 			}
@@ -115,7 +115,16 @@ public class LocalListener implements LocalBluetoothDeviceListener, Transmitter 
 		}
 	}
 
-
+	public void shotBySherif() {
+		for (Connection con : connections) {
+			try {
+				con.shotBySherif();
+			} catch (IOException e) {
+				Log.e(HighNoon.TAG, "sending gun shot: " + e);
+			}
+		}		
+	}
+	
 	public void connect() throws Exception {
 		if (! localBT.isScanning()) {
 			localBT.scan();

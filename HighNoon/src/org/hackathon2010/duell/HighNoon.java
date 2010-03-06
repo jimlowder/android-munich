@@ -5,10 +5,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class HighNoon extends Activity {
 
@@ -17,19 +19,28 @@ public class HighNoon extends Activity {
 	
 	private SensorManager sensorManager;
 	private Sensor orientationSensor;
-	protected Sound intro;
 	protected Sound flute;
 	protected Sound howl;
 	protected Sound bang;
 	protected Sound background;
 	private Controller controller;
 	protected Handler handler = new Handler();
-	  
+	Button restartBtn;
+	Button bangBtn;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.w(TAG, "onCreate");
-		
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		final Window win = getWindow(); 
+		final int screenHeight = win.getWindowManager().getDefaultDisplay().getHeight(); 
+		final int screenWidth = win.getWindowManager().getDefaultDisplay().getWidth(); 
+		win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		String s = "W: " + screenWidth + " / Height: " + screenHeight;
+		Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+		
 		if (mock)
 			setContentView(R.layout.mock);
 		else
@@ -71,7 +82,7 @@ public class HighNoon extends Activity {
 	}
 	
 	private void initUI() {
-		Button restartBtn = (Button) findViewById(R.id.restart);
+		restartBtn = (Button) findViewById(R.id.restart);
 		restartBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				// TODO
@@ -82,18 +93,24 @@ public class HighNoon extends Activity {
 		quitBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				shutdownTransmitter();
-				intro.stop();
 				HighNoon.this.finish();
 			}
 		});
 
-		Button bangBtn = (Button) findViewById(R.id.bang);
+		bangBtn = (Button) findViewById(R.id.bang);
 		bangBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				bang.start(false);
 				controller.localGunShot();
 			}
 		});
+		
+        // quitBtn.getRootView().setBackgroundResource(R.drawable.maze);
+		setBackgroundResource(R.drawable.wait_for_opponent);
+	}
+	
+	public void setBackgroundResource(int resid) {
+		getWindow().getDecorView().setBackgroundResource(resid);
 	}
 	
 	private void initMockUI() {
@@ -129,25 +146,23 @@ public class HighNoon extends Activity {
 
 
 	private void initSounds() {
-		intro = new Sound(this, R.raw.intro);
-		flute = new Sound(this, R.raw.flute);
+		flute = new Sound(this, R.raw.halunken);
 		howl = new Sound(this, R.raw.howl);
 		bang = new Sound(this, R.raw.bang);
-		background = new Sound(this, R.raw.background);
+		background = new Sound(this, R.raw.onceuponatime);		
 	}
 
 	
 	@Override
 	protected void onPause() {
-		intro.stop();
-		flute.stop();
+		background.stop();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 		Log.w(TAG, "onResume");
-		intro.start(true);
+		controller.reset();
 		try {
 			controller.connect();
 		} catch (Exception e) {
@@ -196,7 +211,6 @@ public class HighNoon extends Activity {
 	}
 
 	public void shutUp() {
-		intro.stop();
 		flute.stop();
 		howl.stop();
 		bang.stop();

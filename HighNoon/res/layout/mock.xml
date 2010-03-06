@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/topLL"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="bottom|center_horizontal" android:layout_gravity="center">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
+    android:layout_height="fill_parent">
+    <Button
+		android:id="@+id/bang"
+	    android:layout_width="140px" 
+	    android:layout_height="80px" 
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:textSize="40dip"
+	    android:background="#ffffffff"
+	    android:visibility="invisible"
+	    android:text="Bang!!!"/>
 	<Button
 		android:id="@+id/quit"
 	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentBottom="true"
 	    android:text="Quit"
 	    />
 	<Button
@@ -20,53 +26,49 @@
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
 	    android:text="Restart"
-	    android:enabled = "false"
+	    android:layout_toLeftOf="@id/quit"
+	    android:visibility="invisible"
+	    android:layout_alignParentBottom="true"
 	    />
-	<Button
-		android:id="@+id/bang"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="Shoot!!!"
-	    />
-	</LinearLayout>
-	
+
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="160px"
+	    android:layout_width="60px"
 	    android:layout_height="wrap_content"
 	    android:gravity="bottom|center_horizontal" android:layout_gravity="center" android:layout_marginTop="100px" android:orientation="vertical" android:background="#FFFF8080">
 	<TextView
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content"
-	    android:text="Simulate Remote" android:textSize="20dip"/>
+	    android:text="Remote"
+	    android:textColor="#ff000000"
+	    android:textSize="10dip"/>
 		
 	<Button
 		android:id="@+id/remoteGunIntermediate"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="Gun Anywhere"
+	    android:text="appear"
+	    android:textSize="10dip"
 	    />
 	<Button
 		android:id="@+id/remoteGunDown"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="Gun Down"
+	    android:text="down"
+	    android:textSize="10dip"
 	    />
 	<Button
 		android:id="@+id/remoteGunUp"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="Gun Up"
+	    android:text="aim"
+	    android:textSize="10dip"
 	    />
 	<Button
 		android:id="@+id/remoteBang"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="Bang"
+	    android:text="bang"
+	    android:textSize="10dip"
 	    />
 	</LinearLayout>
-<TextView
-	android:id="@+id/anzeige"
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent"
-    />
-</LinearLayout>
+</RelativeLayout>

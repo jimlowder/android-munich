@@ -40,6 +40,8 @@ public class Connection {
 							controller.remoteGunIntermediate();
 						else if (line.equals(GUN_SHOT))
 							controller.remoteGunShot();
+						else if (line.equals(SHOT_BY_SHERIF))
+							controller.remoteShotBySherif();
 						
 						// localListener.display("READ: " + line);
 					} catch (IOException e) {
@@ -78,5 +80,11 @@ public class Connection {
 	private static final byte[] GUN_SHOT_BUFFER = (GUN_SHOT + "\n").getBytes();
 	public void gunShot() throws IOException {
 		output.write(GUN_SHOT_BUFFER);
+	}
+
+	private static final String SHOT_BY_SHERIF = "SHERIF";
+	private static final byte[] SHOT_BY_SHERIF_BUFFER = (SHOT_BY_SHERIF + "\n").getBytes();
+	public void shotBySherif() throws IOException {
+		output.write(SHOT_BY_SHERIF_BUFFER);
 	}
 }

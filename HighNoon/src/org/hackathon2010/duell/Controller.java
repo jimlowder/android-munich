@@ -1,28 +1,24 @@
 package org.hackathon2010.duell;
 
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
 
 public class Controller {
-	private static enum STATE {SYNC, READY, STEADY, GO, SHOT1, SHOT2}
+	private static enum STATE {SYNC, READY, STEADY, GO, SHOT}
 
 	private HighNoon activity;
 	private Transmitter transmitter;
 	private GunDirection localGun = GunDirection.UNKNOWN;
 	private GunDirection remoteGun = GunDirection.UNKNOWN;
-	private boolean localGunShot;
-	private boolean remoteGunShot;
-	private boolean shootingAlowed;
 	private STATE state;
 	
 	public Controller(HighNoon activity) {
 		this.activity = activity;
-		reset();
 	}
 
 	public void reset() {
 		state = STATE.SYNC;
 		activity.shutUp();
+		activity.background.start(true);
 	}
 	
 	public void setTransmitter(Transmitter transmitter) {
@@ -61,20 +57,34 @@ public class Controller {
 	}
 
 	public void localGunShot()  {
-		transmitter.localGunShot();
-		localGunShot = true;
-		
-		// nextState();
-		// TODO: if not allowed, you were dead by sherif
-		//       if remoteGunShot==false, you win
-		
+		if (state == STATE.SHOT) {
+			return;
+		} else if (state != STATE.GO) {
+			shotBySherif();
+		} else if (localGun == GunDirection.UP) {
+			transmitter.localGunShot();
+			state = STATE.SHOT;
+			activity.handler.post(
+					new Runnable() {					
+						public void run() {
+							activity.setBackgroundResource(R.drawable.winner);
+							activity.bangBtn.setVisibility(View.INVISIBLE);
+						}
+					});
+		}		
 	}
 
 	public void remoteGunShot() {
-		remoteGunShot = true;
-		// nextState();
-		// TODO: if not allowed, he is dead by sherif, you win
-		//       if localGunShot==false, you are dead, he wins
+		if (state != STATE.SHOT) {
+			state = STATE.SHOT;
+			activity.handler.post(
+					new Runnable() {					
+						public void run() {
+							activity.setBackgroundResource(R.drawable.looser);
+							activity.bangBtn.setVisibility(View.INVISIBLE);
+						}
+					});
+		}
 	}
 
 	private void setLocalGunDirection(GunDirection newLocalGun) {
@@ -87,7 +97,14 @@ public class Controller {
 
 		if (state == STATE.SYNC) {	// this is first life sign from opponent
 			state = STATE.READY;
+			activity.background.stop();
 			activity.flute.start(true);
+			activity.handler.post(
+				new Runnable() {					
+					public void run() {
+						activity.setBackgroundResource(R.drawable.holddown);
+					}
+				});
 		}
 
 		handleState();
@@ -99,35 +116,57 @@ public class Controller {
 			break;
 		case READY:
 			if (localGun == GunDirection.DOWN && remoteGun == GunDirection.DOWN) {
-				long delayTilCry = 3000L;
 				state = STATE.STEADY;
 				activity.flute.stop();
-				activity.intro.stop();
-				activity.background.start(true);
-				
+				activity.handler.post(
+					new Runnable() {					
+						public void run() {
+							activity.setBackgroundResource(R.drawable.shoot_when_vulture);
+							activity.bangBtn.setVisibility(View.VISIBLE);
+						}
+					});
 				activity.handler.postDelayed(
 					new Runnable() {
 						public void run() {
 							state = STATE.GO;
 							activity.howl.start(false);
-							activity.background.stop();
+							// activity.creaky.stop();
 						}
-					}, delayTilCry);
+					}, randomDelay());
 			}
 			break;
 		case STEADY:
-			// TODO: what should we do if players shrug during STEADY?
+			if (localGun != GunDirection.DOWN) {
+				shotBySherif();
+			}
 			break;
 		case GO:
 			break;
-		case SHOT1:
-		case SHOT2:
+		case SHOT:
 		}
 	}
+
+	private void shotBySherif() {
+		state = STATE.SHOT;
+		activity.handler.post(
+			new Runnable() {					
+				public void run() {
+					activity.setBackgroundResource(R.drawable.dead_by_sherif);
+					activity.bangBtn.setVisibility(View.INVISIBLE);
+				}
+			});
+	}
 	
-//	public void display(String s) {
-//		activity.display(s);
-//	}
+	public void remoteShotBySherif() {
+		state = STATE.SHOT;
+		activity.handler.post(
+			new Runnable() {					
+				public void run() {
+					activity.setBackgroundResource(R.drawable.opponent_cheated);
+					activity.bangBtn.setVisibility(View.INVISIBLE);
+				}
+			});
+	}
 
 	public HighNoon getActivity() {
 		return activity;
@@ -136,11 +175,9 @@ public class Controller {
 	public void connect() throws Exception {
 		transmitter.connect();
 	}
-}
+	
+	private long randomDelay() {
+		return 5000L;
+	}
 
-/*
-local \ remote	|
-----------------+----
-				|
-				
- */
+}

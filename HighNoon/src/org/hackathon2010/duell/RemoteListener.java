@@ -7,11 +7,9 @@ import it.gerdavax.android.bluetooth.RemoteBluetoothDeviceListener;
 
 public class RemoteListener implements RemoteBluetoothDeviceListener {
 	private RemoteBluetoothDevice remoteDevice;
-	private Controller controller;
 	
-	public RemoteListener(RemoteBluetoothDevice remoteDevice, Controller controller) {
+	public RemoteListener(RemoteBluetoothDevice remoteDevice) {
 		this.remoteDevice = remoteDevice;
-		this.controller = controller;
 	}
 
 	public void gotServiceChannel(int arg0, int arg1) {

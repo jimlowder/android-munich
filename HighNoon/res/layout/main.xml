@@ -1,69 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/topLL"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView
-	android:id="@+id/singleLine"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content"
-    android:singleLine="true"
-    />
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <Button
+		android:id="@+id/bang"
+	    android:layout_width="140px" 
+	    android:layout_height="80px" 
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:textSize="40dip"
+	    android:background="#ffffffff"
+	    android:visibility="invisible"
+	    android:text="Bang!!!"/>
+	<Button
+		android:id="@+id/quit"
+	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content"
-	    >
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentBottom="true"
+	    android:text="Quit"
+	    />
 	<Button
 		android:id="@+id/restart"
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
 	    android:text="Restart"
-	    android:enabled = "false"
+	    android:layout_toLeftOf="@id/quit"
+	    android:visibility="invisible"
+	    android:layout_alignParentBottom="true"
 	    />
-	<Button
-		android:id="@+id/bang"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Peng"
-	    />
-	<Button
-		android:id="@+id/quit"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Quit"
-	    />
-	</LinearLayout>
-	
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-	<Button
-		android:id="@+id/gunDown"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="GunDown"
-	    />
-	<Button
-		android:id="@+id/gunUp"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="GunUp"
-	    />
-	<Button
-		android:id="@+id/gunIntermediate"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="rumfuchteln"
-	    />
-	</LinearLayout>
-<TextView
-	android:id="@+id/anzeige"
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent"
-    />
-</LinearLayout>
+</RelativeLayout>
